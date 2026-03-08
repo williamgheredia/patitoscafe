@@ -88,7 +88,7 @@ Los skills referencian estos directorios (NO se mueven):
 | Recurso | Path | Usado por |
 |---------|------|-----------|
 | PRP Template | `.claude/PRPs/prp-base.md` | Skill `prp` |
-| AI Templates | `.claude/ai_templates/` | Skill `ai` |
+| AI Templates | `.claude/skills/ai/references/` | Skill `ai` |
 | Design Systems | `.claude/design-systems/` | Directo (5 sistemas) |
 
 ---
@@ -122,7 +122,7 @@ mkdir .claude/skills/mi-skill
 | `.claude/agents/*.md` | `.claude/skills/*/SKILL.md` (user-invocable: false, context: fork) |
 | `.claude/prompts/*.md` | `.claude/skills/*/SKILL.md` |
 | Agentes como archivos sueltos | Frontmatter `agent:` y `context: fork` en skills |
-| AI Templates como docs | Skill `/ai` que referencia ai_templates/ |
+| AI Templates como docs | Skill `/ai` con `references/` colocalizados |
 | PRPs como template suelto | Skill `/prp` que genera PRPs con context: fork |
 
 ---

@@ -1,6 +1,6 @@
 ---
 name: new-app
-description: "Entrevista de negocio para extraer logica de un SaaS y generar BUSINESS_LOGIC.md. Usar cuando el usuario quiere definir un nuevo proyecto o app."
+description: "Entrevista de negocio que extrae la logica de un SaaS y genera BUSINESS_LOGIC.md. Activar cuando el usuario dice: quiero crear una app, tengo una idea, quiero hacer un SaaS, empezar un proyecto nuevo, o cualquier variacion de definir un producto desde cero."
 allowed-tools: Read, Write, Edit, Grep, Glob
 ---
 

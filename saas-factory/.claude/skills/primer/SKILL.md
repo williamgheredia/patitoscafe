@@ -1,6 +1,6 @@
 ---
 name: primer
-description: "Inicializar contexto del proyecto para el agente. Ejecutar al inicio de cada conversacion nueva para entender rapidamente el proyecto SaaS Factory."
+description: "Cargar contexto completo del proyecto al inicio de una conversacion. Lee BUSINESS_LOGIC.md, estructura de features, estado de la BD, y configuracion actual. Activar cuando el agente no tiene contexto del proyecto o el usuario dice: que tenemos, donde estamos, dame contexto, resumeme el proyecto."
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

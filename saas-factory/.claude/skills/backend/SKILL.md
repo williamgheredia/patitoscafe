@@ -1,6 +1,6 @@
 ---
 name: backend
-description: "Especialista en logica de negocio, APIs, y arquitectura backend. Delegar tareas de Server Actions, API Routes, integraciones con servicios externos, y validaciones Zod."
+description: "Activar cuando la tarea involucra Server Actions, API Routes, logica de negocio, validaciones Zod, integraciones con servicios externos, o cualquier codigo que corre en el servidor. Tambien cuando el usuario dice: necesito un endpoint, una API, validar datos, o conectar con un servicio externo."
 user-invocable: false
 context: fork
 model: claude-sonnet-4-6

@@ -1,6 +1,6 @@
 ---
 name: add-login
-description: "Inyectar sistema de autenticacion completo con Supabase + Next.js 16. NO pregunta, ejecuta el Golden Path de auth (login, signup, password reset, profiles, RLS)."
+description: "Inyectar sistema de autenticacion completo: login, signup, password reset, profiles, Google OAuth, y RLS. Activar cuando el usuario dice: necesito login, agregar registro, autenticacion, que los usuarios puedan entrar, crear cuentas, o proteger rutas."
 allowed-tools: Read, Write, Edit, Bash
 ---
 

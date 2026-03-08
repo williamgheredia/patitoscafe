@@ -1,6 +1,6 @@
 ---
-name: qa
-description: "QA automatizado con Playwright CLI. Testea flujos de la aplicacion usando headless browser via CLI commands (no MCP). Genera reportes con screenshots y hallazgos. Usar para verificar features, reproducir bugs, o validar cambios antes de deploy."
+name: playwright-cli
+description: "Testing automatizado con Playwright CLI. Navega la app, llena formularios, hace click, toma screenshots, y genera reportes. Activar cuando el usuario dice: testea esto, revisa que funcione, hay un bug, verificalo, checalo en el browser, o despues de implementar una feature para validar."
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: prp
-description: "Generar un Product Requirements Proposal (PRP) para una feature o sistema nuevo. El PRP es el blueprint que separa a los profesionales de los vibe coders. Usar antes de implementar cualquier feature compleja."
+description: "Planificar una feature compleja antes de implementarla. Genera un PRP (Product Requirements Proposal) con objetivo, comportamiento, modelo de datos, y fases. Activar SIEMPRE antes de bucle-agentico, o cuando el usuario dice: planea esto, necesito un sistema de X, quiero agregar algo grande."
 context: fork
 allowed-tools: Read, Write, Edit, Grep, Glob
 ---

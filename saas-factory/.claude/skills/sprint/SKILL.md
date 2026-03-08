@@ -1,6 +1,6 @@
 ---
 name: sprint
-description: "Modo SPRINT del Bucle Agentico. Para tareas rapidas que se resuelven en minutos sin planificacion formal. Usar cuando la tarea se describe en una oracion, afecta 1-3 archivos, y el resultado es inmediatamente verificable."
+description: "Ejecutar tareas rapidas sin planificacion formal. Activar cuando la tarea se resuelve en minutos, afecta 1-3 archivos, y el resultado es verificable de inmediato. Ejemplos: arregla un boton, cambia un color, agrega un campo, corrige un typo, ajusta un componente."
 ---
 
 # Modo SPRINT del Bucle Agentico

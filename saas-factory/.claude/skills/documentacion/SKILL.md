@@ -1,6 +1,6 @@
 ---
 name: documentacion
-description: "Especialista en documentacion. Actualiza proactivamente la documentacion cuando se realizan cambios en el codigo. Llamar despues de cambios significativos en el codigo."
+description: "Activar automaticamente despues de cambios significativos en el codigo para actualizar documentacion, README, comentarios en codigo, y cualquier referencia que haya quedado desactualizada. Tambien cuando el usuario dice: documenta esto, actualiza el README, que hace este codigo."
 user-invocable: false
 context: fork
 model: claude-sonnet-4-6

@@ -1,6 +1,6 @@
 ---
 name: frontend
-description: "Especialista en UI/UX, componentes React, Tailwind CSS, y optimizacion de frontend. Delegar tareas de crear interfaces, componentes, y resolver problemas de styling."
+description: "Activar cuando la tarea involucra crear componentes React, paginas, layouts, formularios, modales, tablas, Tailwind CSS, animaciones, responsive design, o cualquier cosa visual. Tambien cuando el usuario dice: hazme una pantalla, un formulario, un boton, cambia el diseno, arregla el estilo."
 user-invocable: false
 context: fork
 model: claude-sonnet-4-6

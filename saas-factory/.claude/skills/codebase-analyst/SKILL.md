@@ -1,6 +1,6 @@
 ---
 name: codebase-analyst
-description: "Analisis profundo de patrones del codebase, convenciones, y estandares del equipo. Usar proactivamente para descubrir patrones antes de implementar features nuevas."
+description: "Activar antes de implementar features nuevas para entender la arquitectura actual, descubrir patrones existentes, convenciones del proyecto, y codigo reutilizable. Tambien cuando el usuario dice: como funciona esto, explicame la arquitectura, que patrones usamos, analiza el codigo."
 user-invocable: false
 agent: Explore
 model: claude-sonnet-4-6

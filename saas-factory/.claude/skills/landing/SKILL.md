@@ -1,6 +1,6 @@
 ---
 name: landing
-description: "Crear landing pages de alta conversion. Entrevista de copy + diseno + ejecucion completa. Usar cuando el usuario pide crear una landing page nueva."
+description: "Crear landing pages de alta conversion con entrevista de copy + diseno + codigo completo. Activar cuando el usuario dice: necesito una landing, pagina de venta, pagina principal, homepage, o cualquier pagina publica para captar usuarios o vender."
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash
 ---
 

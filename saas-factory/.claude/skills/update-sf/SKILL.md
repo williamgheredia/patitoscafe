@@ -1,6 +1,6 @@
 ---
 name: update-sf
-description: "Actualizar SaaS Factory a la ultima version. Busca el alias saas-factory, hace git pull y reemplaza la carpeta .claude/ con la nueva version."
+description: "Actualizar SaaS Factory a la ultima version. Activar cuando el usuario dice: actualiza el template, hay nueva version, update SaaS Factory, quiero la ultima version, o cuando se detecta que el template esta desactualizado."
 allowed-tools: Read, Bash
 ---
 
@@ -63,7 +63,7 @@ SaaS Factory actualizado correctamente.
 Cambios aplicados:
 - .claude/skills/ (skills actualizados)
 - .claude/PRPs/ (templates PRP actualizados)
-- .claude/ai_templates/ (bloques AI actualizados)
+- .claude/skills/ai/references/ (AI templates actualizados)
 - .claude/design-systems/ (sistemas de diseno actualizados)
 
 Archivos NO modificados:

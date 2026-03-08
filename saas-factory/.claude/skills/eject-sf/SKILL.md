@@ -1,6 +1,6 @@
 ---
 name: eject-sf
-description: "DESTRUCTIVO: Eliminar toda la configuracion de SaaS Factory y dejar solo el software funcional. Usar antes de distribuir el proyecto. Requiere confirmacion del usuario."
+description: "DESTRUCTIVO: Eliminar SaaS Factory del proyecto y dejar solo el software funcional. Activar cuando el usuario dice: quiero quitar SaaS Factory, eject, remover el template, limpiar el proyecto, o distribuir el codigo sin la fabrica. SIEMPRE confirmar antes de ejecutar."
 allowed-tools: Read, Write, Edit, Bash
 ---
 
@@ -16,7 +16,7 @@ ADVERTENCIA: OPERACION DESTRUCTIVA
 Este comando eliminara PERMANENTEMENTE:
 - .claude/skills/ (skills del proyecto)
 - .claude/design-systems/ (sistemas de diseno)
-- .claude/ai_templates/ (bloques AI)
+- .claude/skills/ai/references/ (AI templates)
 - .claude/PRPs/ (templates PRP)
 - .mcp.json (configuracion de MCPs)
 - CLAUDE.md (system prompt)
@@ -162,7 +162,7 @@ Eject completado.
 Eliminado:
 - .claude/skills/ (skills del proyecto)
 - .claude/design-systems/ (sistemas de diseno)
-- .claude/ai_templates/ (bloques AI)
+- .claude/skills/ai/references/ (AI templates)
 - .claude/PRPs/ (templates PRP)
 - .mcp.json (configuracion MCPs)
 - CLAUDE.md (system prompt)

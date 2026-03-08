@@ -1,6 +1,6 @@
 ---
 name: supabase-admin
-description: "Especialista en operaciones de Supabase: base de datos, auth, storage, y RLS. Delegar tareas de queries SQL, migraciones, politicas de seguridad, y configuracion de auth."
+description: "Activar cuando la tarea involucra base de datos, crear tablas, migraciones SQL, Row Level Security (RLS), queries, configurar auth en Supabase, storage, o cualquier operacion de BD. Tambien cuando el usuario dice: necesito guardar datos, crear una tabla, proteger datos, configurar permisos."
 user-invocable: false
 context: fork
 model: claude-sonnet-4-6

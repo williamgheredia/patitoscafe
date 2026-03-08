@@ -1,6 +1,6 @@
 ---
 name: calidad
-description: "Especialista en testing y validacion de calidad. Crea unit tests, ejecuta test suites, valida quality gates, e itera hasta que todo pase. Llamar despues de implementar features."
+description: "Activar despues de implementar features para crear tests, ejecutar test suites, validar que typecheck y build pasen, y verificar que todo funciona. Tambien cuando el usuario dice: testea esto, revisa la calidad, corre los tests, asegurate que no se rompio nada."
 user-invocable: false
 context: fork
 model: claude-sonnet-4-6

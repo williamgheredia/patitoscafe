@@ -1,6 +1,6 @@
 ---
 name: ai
-description: "Implementar capacidades de IA usando AI Templates. Templates copy-paste para Vercel AI SDK v5 + OpenRouter. Usar cuando el usuario quiere agregar chat, streaming, vision, tools, RAG, web search, o cualquier feature de IA a su app."
+description: "Agregar capacidades de IA a la app usando templates de Vercel AI SDK v5 + OpenRouter. Activar cuando el usuario dice: quiero un chat, agregar IA, analizar imagenes, buscar en internet, generar texto, chatbot, asistente, RAG, embeddings, o cualquier feature que involucre un modelo de lenguaje."
 argument-hint: "[template-name: setup-base|chat|action-stream|web-search|historial|vision|tools|rag|single-call|structured-outputs|generative-ui]"
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash
 ---
@@ -65,19 +65,22 @@ Action Path:        00 -> 01-ALT -> 02 -> 03 -> 04 -> 06
 
 ## Mapa de Argumentos a Archivos
 
+Todos los templates viven en `${CLAUDE_SKILL_DIR}/references/`.
+
 | Argumento | Archivo |
 |-----------|---------|
-| `setup-base` o `setup` | `.claude/ai_templates/agents/00-setup-base.md` |
-| `chat` | `.claude/ai_templates/agents/01-chat-streaming.md` |
-| `action-stream` | `.claude/ai_templates/agents/01-alt-action-stream.md` |
-| `web-search` | `.claude/ai_templates/agents/02-web-search.md` |
-| `historial` | `.claude/ai_templates/agents/03-historial-supabase.md` |
-| `vision` | `.claude/ai_templates/agents/04-vision-analysis.md` |
-| `tools` | `.claude/ai_templates/agents/05-tools-funciones.md` |
-| `rag` | `.claude/ai_templates/agents/06-rag-basico.md` |
-| `single-call` | `.claude/ai_templates/single-call.md` |
-| `structured-outputs` | `.claude/ai_templates/structured-outputs.md` |
-| `generative-ui` | `.claude/ai_templates/generative-ui.md` |
+| `setup-base` o `setup` | `references/agents/00-setup-base.md` |
+| `chat` | `references/agents/01-chat-streaming.md` |
+| `action-stream` | `references/agents/01-alt-action-stream.md` |
+| `web-search` | `references/agents/02-web-search.md` |
+| `historial` | `references/agents/03-historial-supabase.md` |
+| `vision` | `references/agents/04-vision-analysis.md` |
+| `tools` | `references/agents/05-tools-funciones.md` |
+| `rag` | `references/agents/06-rag-basico.md` |
+| `single-call` | `references/single-call.md` |
+| `structured-outputs` | `references/structured-outputs.md` |
+| `generative-ui` | `references/generative-ui.md` |
+| (indice completo) | `references/_index.md` |
 
 ---
 
@@ -85,14 +88,29 @@ Action Path:        00 -> 01-ALT -> 02 -> 03 -> 04 -> 06
 
 ### Si se proporciono un argumento (`$ARGUMENTS`)
 
-1. Mapear el argumento a la ruta del template usando la tabla de arriba
-2. Leer el archivo `.md` del template
-3. Seguir las instrucciones del template para implementar en el proyecto
+1. Mapear el argumento al archivo en `${CLAUDE_SKILL_DIR}/references/` usando la tabla
+2. Leer el archivo completo del template
+3. Seguir las instrucciones paso a paso para implementar en el proyecto
 4. El template contiene codigo copy-paste listo, adaptarlo al proyecto actual
 
 ### Si NO se proporciono argumento
 
-Mostrar la lista de templates disponibles (la tabla de arriba) y preguntar al usuario cual quiere implementar. Sugerir empezar por `setup-base` si no tiene nada configurado todavia.
+1. Leer `${CLAUDE_SKILL_DIR}/references/_index.md` para ver el catalogo completo
+2. Preguntar al usuario que capacidad de IA necesita
+3. Sugerir empezar por `setup-base` si no tiene OpenRouter configurado todavia
+
+### Si el usuario describe lo que quiere sin saber el nombre
+
+Mapear su descripcion al template correcto:
+- "quiero un chat" → `chat` (o `action-stream`)
+- "que busque en internet" → `web-search`
+- "que recuerde conversaciones" → `historial`
+- "que analice fotos/imagenes" → `vision`
+- "que pueda hacer cosas" → `tools`
+- "que busque en mis documentos" → `rag`
+- "una sola respuesta sin chat" → `single-call`
+- "que me de datos estructurados" → `structured-outputs`
+- "que genere interfaz dinamica" → `generative-ui`
 
 ---
 

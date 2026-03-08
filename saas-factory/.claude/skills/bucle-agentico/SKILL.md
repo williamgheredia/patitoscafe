@@ -1,6 +1,6 @@
 ---
 name: bucle-agentico
-description: "Bucle Agentico modo BLUEPRINT. Para sistemas complejos que requieren construccion por fases con mapeo de contexto just-in-time. Usar cuando la tarea requiere multiples componentes coordinados, cambios en DB + codigo + UI, o fases que dependen una de otra."
+description: "Ejecutar features complejas por fases con mapeo de contexto real antes de cada fase. Activar cuando la tarea toca multiples archivos, requiere cambios en BD + codigo + UI coordinados, tiene fases que dependen una de otra, o cuando un PRP fue aprobado y hay que implementarlo."
 ---
 
 # Modo BLUEPRINT del Bucle Agentico
@@ -142,7 +142,7 @@ El sistema se BLINDA con cada error. Cuando algo falla:
 2. **TESTEA** que funcione
 3. **DOCUMENTA** el aprendizaje:
    - En el PRP actual (seccion "Aprendizajes")
-   - O en el prompt relevante (`.claude/prompts/*.md`)
+   - O en el skill relevante (`.claude/skills/*/SKILL.md`)
 4. Continua con la subtarea
 
 **Formato de documentacion:**
@@ -157,7 +157,7 @@ El sistema se BLINDA con cada error. Cuando algo falla:
 | Tipo de Error | Donde Documentar |
 |---------------|------------------|
 | Especifico de esta feature | PRP actual (seccion Aprendizajes) |
-| Aplica a multiples features | `.claude/prompts/` relevante |
+| Aplica a multiples features | Skill relevante (`.claude/skills/*/SKILL.md`) |
 | Aplica a TODO el proyecto | `CLAUDE.md` (seccion No Hacer) |
 
 El conocimiento persiste. El mismo error NUNCA ocurre dos veces en este proyecto ni en proyectos futuros.

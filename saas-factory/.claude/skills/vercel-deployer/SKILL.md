@@ -1,6 +1,6 @@
 ---
 name: vercel-deployer
-description: "Especialista en deployment con Vercel CLI. Delegar tareas de deployments, configuracion de environment variables, dominios, y monitoreo."
+description: "Activar cuando el usuario quiere publicar, hacer deploy, subir a produccion, configurar un dominio, agregar variables de entorno en Vercel, hacer rollback, o revisar el estado del deployment. Tambien cuando dice: publicalo, subelo, quiero verlo en vivo, configura el dominio."
 user-invocable: false
 context: fork
 model: claude-sonnet-4-6

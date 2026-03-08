@@ -266,7 +266,7 @@ Sistemas de diseno visuales en `.claude/design-systems/`.
 ├── PRPs/                      # Product Requirements Proposals
 │   └── prp-base.md           # Template base
 │
-├── ai_templates/              # Bloques de IA (referencia)
+│   │   └── references/       # AI Templates (11 bloques)
 │   ├── agents/               # Templates secuenciales
 │   └── [standalone]          # Templates independientes
 │
