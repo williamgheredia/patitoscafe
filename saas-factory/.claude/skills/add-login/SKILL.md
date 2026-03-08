@@ -1,25 +1,31 @@
-# /add-login - Sistema de Autenticación Completo
+---
+name: add-login
+description: "Inyectar sistema de autenticacion completo con Supabase + Next.js 16. NO pregunta, ejecuta el Golden Path de auth (login, signup, password reset, profiles, RLS)."
+allowed-tools: Read, Write, Edit, Bash
+---
 
-Inyecta autenticación B2B production-ready con Supabase + Next.js 16.
+# Sistema de Autenticacion Completo
 
-**NO preguntas. Ejecutas el Golden Path completo.**
+Inyecta autenticacion B2B production-ready con Supabase + Next.js 16.
+
+**NO preguntes. Ejecuta el Golden Path completo.**
 
 ---
 
-## Contexto Técnico
+## Contexto Tecnico
 
 **Next.js 16:**
 - `proxy.ts` (no middleware.ts) - Node.js runtime
-- Función: `proxy()` (no middleware())
+- Funcion: `proxy()` (no middleware())
 
 **Supabase SSR:**
 - `@supabase/ssr` con `getAll()` / `setAll()` (NUNCA get/set/remove)
 - Server: siempre `getUser()`, NUNCA `getSession()`
 
-**Patrón Profiles:**
+**Patron Profiles:**
 - `auth.users` es privado y limitado
 - `public.profiles` almacena datos del usuario
-- Trigger crea perfil automáticamente al signup
+- Trigger crea perfil automaticamente al signup
 
 **Google OAuth:**
 - Supabase tiene Google OAuth built-in (NO se necesita NextAuth)
@@ -816,10 +822,10 @@ export function AuthDivider() {
 
 ---
 
-## Flujo de Ejecución
+## Flujo de Ejecucion
 
-1. Crear TODOS los archivos de código listados arriba
-2. Verificar que `@supabase/ssr` esté instalado (si no: `npm install @supabase/ssr`)
+1. Crear TODOS los archivos de codigo listados arriba
+2. Verificar que `@supabase/ssr` este instalado (si no: `npm install @supabase/ssr`)
 3. **Usar Supabase MCP para crear la tabla profiles:**
 
 ```
@@ -846,7 +852,7 @@ create policy "Users can update own profile"
   on public.profiles for update
   using (auth.uid() = id);
 
--- Trigger: crear perfil automáticamente al signup
+-- Trigger: crear perfil automaticamente al signup
 create or replace function public.handle_new_user()
 returns trigger as $$
 begin
@@ -866,13 +872,13 @@ create trigger on_auth_user_created
   for each row execute procedure public.handle_new_user();
 ```
 
-4. Mostrar mensaje de completación
+4. Mostrar mensaje de completacion
 
 ---
 
 ## Mensaje Final
 
-Después de crear archivos Y ejecutar la migración, muestra:
+Despues de crear archivos Y ejecutar la migracion, muestra:
 
 ```
 Auth B2B implementado!
