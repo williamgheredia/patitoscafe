@@ -2,6 +2,94 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.0.0] - 2026-03-15
+
+### SaaS Factory V4: Agent-First & Skills Unified
+
+**Theme: "Todo es un Skill"**
+
+V4 unifica commands, agents y prompts en un solo concepto: **Skills**. 22 skills con YAML frontmatter, auto-discovery, y progressive disclosure.
+
+### Added
+
+#### Skills System (22 total)
+Nuevo directorio unificado `.claude/skills/` reemplaza commands + agents + prompts:
+
+**User-invocable (15):**
+- `new-app` — Entrevista de negocio → BUSINESS_LOGIC.md
+- `landing` — Landing cinematica scroll-stop + copy AIDA/PAS + glass-morphism
+- `primer` — Inicializar contexto del proyecto
+- `add-login` — Auth completo Supabase (Email + OAuth + profiles + RLS)
+- `ai` — 11 AI templates (chat, RAG, vision, tools, web search, structured outputs, generative UI)
+- `prp` — Product Requirements Proposal
+- `bucle-agentico` — Features complejas por fases coordinadas
+- `sprint` — Tareas rapidas sin planificacion
+- `playwright-cli` — QA automatizado con Playwright CLI
+- `memory-manager` — **NUEVO:** Memoria persistente por proyecto en `.claude/memory/`
+- `image-generation` — **NUEVO:** Generacion de imagenes via OpenRouter + Gemini
+- `autoresearch` — **NUEVO:** Auto-optimizacion de skills (patron Karpathy)
+- `skill-creator` — Crear nuevos skills
+- `eject-sf` — Remover SaaS Factory (destructivo)
+- `update-sf` — Actualizar a ultima version
+
+**Auto-triggered por Claude (7):**
+- `frontend`, `backend`, `supabase-admin`, `codebase-analyst`, `vercel-deployer`, `documentacion`, `calidad`
+
+#### Persistent Memory System
+- `.claude/memory/` — Memoria versionada en git, por proyecto
+- Carpetas por tipo: `user/`, `feedback/`, `project/`, `reference/`
+- `MEMORY.md` como indice (max 200 lineas, auto-loaded)
+- Deshabilita auto-memory de Claude Code automaticamente
+- El usuario controla que se guarda (no Claude)
+
+#### Image Generation
+- Script `generate-image.ts` usando OpenRouter API + Gemini
+- Soporta text-to-image y image editing
+- Usa `OPENROUTER_API_KEY` del proyecto (via `/ai setup-base`)
+
+#### Autoresearch
+- Loop autonomo de optimizacion de skills (basado en Karpathy)
+- Evals binarias, mutacion de prompts, git branching automatico
+- Limites de seguridad: max 30 iteraciones, $5 budget, backup obligatorio
+
+#### Landing Page Upgrade
+- Reemplaza landing generica por scroll-stop cinematico estilo Apple
+- Scroll-driven video animation (FFmpeg frame extraction + Canvas)
+- Glass-morphism design system, starscape, annotation cards con snap-stop
+- Integrado con copy AIDA/PAS y psicologia de ventas de la landing anterior
+- `references/sections-guide.md` con implementacion detallada (983 lineas)
+
+### Changed
+
+#### CLAUDE.md (Complete Rewrite)
+- Reescrito como **Decision Tree** (user input → skill activation)
+- Tabla de skills actualizada (22 skills)
+- Estructura de carpetas incluye `.claude/memory/`
+- Seccion de memoria persistente
+
+#### README.md (Complete Rewrite)
+- Actualizado a V4 con documentacion de 22 skills
+- Seccion de memoria persistente vs auto-memory
+- Tabla de design systems
+- Workflow actualizado
+
+#### SKILLS_README.md
+- Inventario actualizado a 22 skills
+- Seccion de memoria persistente
+- Frontmatter YAML documentation
+
+### Migration V3 → V4
+
+| V3 | V4 |
+|----|-----|
+| `.claude/commands/*.md` | `.claude/skills/*/SKILL.md` |
+| `.claude/agents/*.md` | `.claude/skills/*/SKILL.md` (user-invocable: false) |
+| `.claude/prompts/*.md` | `.claude/skills/*/SKILL.md` |
+| `.claude/ai_templates/` (separate dir) | `.claude/skills/ai/references/` |
+| 19 components scattered | 22 unified skills |
+
+---
+
 ## [3.1.0] - 2025-01-11
 
 ### System Prompt Cleanup

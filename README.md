@@ -2,7 +2,7 @@
   <img src="assets/factory-overview.png" alt="SaaS Factory - The Machine that Builds the Machine" width="800"/>
 </p>
 
-<h1 align="center">SaaS Factory</h1>
+<h1 align="center">SaaS Factory V4</h1>
 
 <p align="center">
   <strong>La maquina que construye la maquina es mas importante que el producto.</strong><br/>
@@ -10,18 +10,18 @@
 </p>
 
 <p align="center">
-  <a href="#recorrido-por-la-fabrica">La Fabrica</a> &bull;
-  <a href="#el-golden-path-stack-unico">Tech Stack</a> &bull;
-  <a href="#el-cyborg---3-mcps-trabajando-juntos">MCPs</a> &bull;
-  <a href="#recursividad-agentica">Recursividad</a> &bull;
+  <a href="#que-es-saas-factory">Que Es</a> &bull;
+  <a href="#el-golden-path">Tech Stack</a> &bull;
+  <a href="#22-skills-tu-caja-de-herramientas">22 Skills</a> &bull;
+  <a href="#3-mcps-tus-sentidos">MCPs</a> &bull;
   <a href="#instalacion-2-minutos">Instalacion</a>
 </p>
 
 ---
 
-## Esto no es un repositorio. Esto es una fabrica de software.
+## Que es SaaS Factory
 
-La mayoria esta ahi afuera haciendo **"Vibe Coding"**, tirando prompts al azar o peor, atrapados en el infierno del No-Code construyendo telaranas que se rompen cuando las miras feo.
+La mayoria esta ahi afuera haciendo **"Vibe Coding"**, tirando prompts al azar o atrapados en el infierno del No-Code construyendo telaranas que se rompen cuando las miras feo.
 
 SaaS Factory es la **infraestructura exacta** para que el codigo deje de ser dados al azar y se convierta en un **activo empresarial**. Un sistema donde la IA no "adivina" — ejecuta con **precision industrial**.
 
@@ -33,165 +33,176 @@ Cuando ejecutas `saas-factory`, copias toda la **infraestructura de la fabrica**
 
 ```
 tu-proyecto/
-├── CLAUDE.md              # Factory OS - Cerebro del agente
-├── GEMINI.md              # Espejo para Gemini
-├── .mcp.json              # MCPs configurados (Next.js, Playwright, Supabase)
-├── src/                   # App con Feature-First Architecture
+├── CLAUDE.md                  # Factory OS — Cerebro del agente
+├── GEMINI.md                  # Espejo para Gemini
+├── .mcp.json                  # 3 MCPs configurados (Next.js, Playwright, Supabase)
+├── src/                       # App con Feature-First Architecture
 ├── .claude/
-│   ├── commands/          # /new-app, /landing, etc.
-│   ├── PRPs/              # Blueprints de features
-│   └── prompts/           # Assembly Line (bucle agentico)
-└── package.json           # Next.js 16, React 19, Tailwind 3.4
+│   ├── skills/                # 22 skills (V4) — Todo es un Skill
+│   ├── memory/                # Memoria persistente por proyecto
+│   ├── PRPs/                  # Blueprints de features
+│   └── design-systems/        # 5 sistemas de diseno
+└── package.json               # Next.js 16, React 19, Tailwind 3.4
 ```
 
 ---
 
-## Recorrido por la Fabrica
+## V4: Todo es un Skill
 
-Piensa en este sistema como una **fabrica automatizada de software**. Cada parte tiene su equivalente en una Tesla Gigafactory:
-
----
-
-### 1. Factory OS (El Cerebro) — `CLAUDE.md`
-
-<img src="assets/factory-os.png" alt="Factory OS - El Cerebro" width="600"/>
-
-La **constitucion** de la fabrica. Aqui se define la identidad, el stack tecnologico y las reglas de oro. Sin esto, la IA esta perdida; con esto, sabe exactamente como debe entregar cada linea de codigo. Es el **sistema operativo de la inteligencia**.
-
----
-
-### 2. Blueprints (Los Planos) — `.claude/PRPs/*.md`
-
-<img src="assets/blueprints.png" alt="Blueprints - Los Planos" width="600"/>
-
-Los planos detallados de cada pieza. Antes de tocar una sola linea de codigo, se genera un **Product Requirements Proposal** (PRP). Es el "contrato" entre tu y la maquina. Si el plano esta mal, el coche sale mal. Aqui se valida la logica **antes** de construir.
-
----
-
-### 3. Control Room (El Humano) — Tu, el Arquitecto
-
-<img src="assets/control-room.png" alt="Control Room - El Humano" width="600"/>
-
-El unico componente que no es codigo. Tu trabajo no es escribir codigo, es **aprobar planos y validar calidad**. Tu decides el QUE, la fabrica ejecuta el COMO. Eres el dueno de la vision.
-
----
-
-### 4. Robot Arms (Las Manos) — Terminal + Supabase MCP
-
-<img src="assets/robot-arms.png" alt="Robot Arms - Las Manos" width="600"/>
-
-La maquinaria pesada que mueve bytes. Herramientas para crear tablas en la base de datos, ejecutar migraciones y escribir archivos. La IA no tiene que "pedirte" permiso para cada tornillo — tiene las herramientas para hacerlo bajo tu supervision.
-
----
-
-### 5. Eyes/Cameras (La Vision) — Playwright MCP
-
-<img src="assets/eyes-cameras.png" alt="Eyes/Cameras - La Vision" width="600"/>
-
-La mayoria de las IAs son **ciegas**. Con Playwright MCP, la fabrica puede abrir el navegador, ver tu app y sacar capturas. Si un boton esta chueco, los "ojos" lo ven y lo corrigen **antes de que tu lo digas**.
-
----
-
-### 6. Quality Control — Next.js MCP
-
-<img src="assets/quality-control.png" alt="Quality Control - Next.js MCP" width="600"/>
-
-El escaner que detecta defectos de fabrica en tiempo real. Conectado directamente al servidor de desarrollo. Si algo falla en la compilacion o hay un error de runtime, se detecta al milisegundo. No "adivina" que esta roto, lo **sabe** con precision industrial.
-
----
-
-### 7. Assembly Line (Linea de Ensamblaje) — Bucle Agentico
-
-<img src="assets/assembly-line.png" alt="Assembly Line - Bucle Agentico" width="600"/>
-
-El proceso paso a paso: **Delimitar -> Mapear -> Ejecutar -> Validar**. Es lo que evita el "Vibe Coding". No se hace todo a la vez. Se va por fases, asegurando que cada pieza este perfecta antes de pasar a la siguiente estacion.
-
----
-
-### 8. Neural Network (Aprendizaje) — Auto-Blindaje
-
-<img src="assets/neural-network.png" alt="Neural Network - Auto-Blindaje" width="600"/>
-
-El exoesqueleto de acero. Cada vez que se comete un error, se documenta. Si un error ocurre una vez, es una leccion; si ocurre dos veces, la fabrica ha fallado. El Auto-Blindaje asegura que **la maquina sea mas fuerte manana de lo que es hoy**.
+V4 unifica commands, agents y prompts en un solo concepto: **Skills**.
 
 ```
-Error ocurre -> Se arregla -> Se DOCUMENTA -> NUNCA ocurre de nuevo
+V3: commands/ + agents/ + prompts/ (3 dirs, fragmentado)
+V4: skills/ (1 dir, 22 skills unificados con YAML metadata)
 ```
 
-Cada error encontrado se documenta en el archivo relevante:
-- **PRP actual** -> Errores especificos de esta feature
-- **`.claude/prompts/*.md`** -> Errores que aplican a multiples features
-- **`CLAUDE.md`** -> Errores criticos que aplican a TODO
+El usuario habla en lenguaje natural. El agente decide que skill activar:
+
+```
+"Quiero crear una app" → skill NEW-APP (entrevista de negocio)
+"Necesito una landing" → skill LANDING (scroll-stop cinematico)
+"Quiero agregar IA"    → skill AI (11 templates: chat, RAG, vision, tools...)
+"Optimiza este skill"  → skill AUTORESEARCH (loop autonomo de mejora)
+```
 
 ---
 
-### 9. Asset Library (Biblioteca de Activos) — Directorio `.claude/`
+## 22 Skills: Tu Caja de Herramientas
 
-<img src="assets/asset-library.png" alt="Asset Library - Biblioteca de Activos" width="600"/>
+### Skills que el usuario invoca
 
-El almacen central de piezas de alto rendimiento. Aqui viven los **Comandos Maestros**, los **Sistemas de Diseno**, las **Skills**, los **Agentes Especializados** y los **Templates LEGO**. En lugar de reinventar la rueda en cada proyecto, la fabrica saca el motor de la estanteria y lo ensambla.
+| Skill | Que hace |
+|-------|---------|
+| `/new-app` | Entrevista de negocio → genera `BUSINESS_LOGIC.md` con la especificacion completa |
+| `/landing` | Landing cinematica estilo Apple: scroll-driven video + copy AIDA/PAS + glass-morphism |
+| `/primer` | Carga contexto del proyecto al inicio de sesion |
+| `/add-login` | Auth completo con Supabase (Email + Google OAuth + profiles + RLS) |
+| `/ai [template]` | 11 templates de IA: chat, RAG, vision, tools, web search, structured outputs |
+| `/prp [feature]` | Genera Product Requirements Proposal antes de implementar |
+| `/bucle-agentico` | Implementa features complejas por fases coordinadas (DB + API + UI) |
+| `/sprint` | Tareas rapidas sin planificacion (un fix, un componente, algo simple) |
+| `/qa` | Testing automatizado con Playwright CLI |
+| `/memory-manager` | Memoria persistente POR PROYECTO en `.claude/memory/` (reemplaza auto-memory) |
+| `/image-generation` | Genera y edita imagenes con OpenRouter + Gemini |
+| `/autoresearch` | Auto-optimiza skills con loop autonomo (patron Karpathy) |
+| `/skill-creator` | Crea nuevos skills para extender la fabrica |
+| `/eject-sf` | Remueve SaaS Factory del proyecto (destructivo) |
+| `/update-sf` | Actualiza a la ultima version |
+
+### Skills que el agente activa automaticamente
+
+| Skill | Se activa cuando... |
+|-------|---------------------|
+| `frontend` | UI/UX, componentes React, Tailwind, animaciones |
+| `backend` | Server Actions, APIs, logica de negocio, validaciones Zod |
+| `supabase-admin` | Migraciones, RLS, queries SQL, configurar auth |
+| `codebase-analyst` | Analisis de patrones, convenciones, arquitectura |
+| `vercel-deployer` | Deploy, env vars, dominios, rollbacks |
+| `documentacion` | Actualizar docs despues de cambios en codigo |
+| `calidad` | Testing, quality gates, validacion |
 
 ---
 
-## El Golden Path (Stack Unico)
+## Memoria Persistente por Proyecto
+
+SaaS Factory V4 incluye un sistema de memoria que vive **dentro del repo**, no en tu maquina:
+
+```
+.claude/memory/
+├── MEMORY.md       # Indice (se carga automaticamente)
+├── user/           # Preferencias del usuario/equipo
+├── feedback/       # Correcciones (que hacer/no hacer)
+├── project/        # Decisiones y estado de iniciativas
+└── reference/      # Patrones, soluciones, donde encontrar cosas
+```
+
+**vs Auto-memory de Claude Code:**
+
+| | Auto-memory (default) | Memory Manager (V4) |
+|-|---|---|
+| **Ubicacion** | `~/.claude/projects/` (local) | `.claude/memory/` (en el repo) |
+| **Viaja con git** | No | Si |
+| **Versionado** | No | Si (cada cambio es un commit) |
+| **Compartido con equipo** | No | Si |
+| **Control** | Claude decide | Tu decides |
+
+La primera vez que se usa, el skill deshabilita automaticamente la auto-memory de Claude Code y crea la estructura.
+
+---
+
+## El Golden Path
 
 > *"Pueden tener el coche del color que quieran, siempre que sea negro."* — Henry Ford
 
-Un solo stack perfeccionado. No hay opciones. Solo el camino dorado:
+Un solo stack perfeccionado. Sin opciones. Solo el camino dorado:
 
 | Capa | Tecnologia | Por Que |
 |------|------------|---------|
 | **Frontend** | Next.js 16 + React 19 + TypeScript | Full-stack, Turbopack |
 | **Estilos** | Tailwind CSS 3.4 + shadcn/ui | Utility-first, sin context switching |
 | **Backend** | Supabase (Auth + DB + Storage + RLS) | PostgreSQL completo sin servidor |
+| **AI Engine** | Vercel AI SDK v5 + OpenRouter (300+ modelos) | Multi-model, sin vendor lock-in |
+| **Validacion** | Zod | Type-safe schemas |
+| **Estado** | Zustand | Lightweight client state |
 | **Testing** | Playwright MCP | Validacion visual automatica |
 | **Deploy** | Vercel | Un click a produccion |
 
 ---
 
-## El Cyborg - 3 MCPs Trabajando Juntos
+## 3 MCPs: Tus Sentidos
 
 ```typescript
-// next.config.ts - Esta linea lo cambia todo
+// next.config.ts — Esta linea lo cambia todo
 experimental: { mcpServer: true }
 ```
 
-| MCP | Rol (Analogia) | Superpoder |
-|-----|----------------|------------|
+| MCP | Rol | Superpoder |
+|-----|-----|------------|
 | **Next.js DevTools** | Quality Control | Lee errores/logs en tiempo real via `/_next/mcp` |
-| **Playwright** | Eyes/Cameras | Captura screenshots, valida UX visualmente |
-| **Supabase** | Robot Arms | Ejecuta SQL, migraciones, consulta logs |
+| **Playwright** | Ojos | Captura screenshots, valida UX visualmente |
+| **Supabase** | Manos | Ejecuta SQL, migraciones, consulta logs |
 
 **Sin MCPs:** La IA adivina que esta roto.
 **Con MCPs:** La IA **ve** exactamente que esta roto y por que.
 
 ---
 
-## Recursividad Agentica
+## Arquitectura Feature-First
 
-> La capacidad de un sistema autonomo para utilizar el resultado de su propia ejecucion (exito o error) como input para su siguiente iteracion, sin intervencion humana.
+Todo el contexto de una feature en un solo lugar:
 
-<p align="center">
-  <img src="assets/agentic-recursion.png" alt="Recursividad Agentica - Bucle" width="500"/>
-</p>
-
-**3 principios:**
-
-1. **Clausura del Bucle de Error** — El "No" no es un final, es una curva de retorno. Error -> El Agente lo lee -> Ajusta estrategia -> Reintenta.
-
-2. **Iteracion Convergente** — El sistema no se detiene por tiempo, se detiene por **exito**. La unica salida posible es la "App Lista". El fracaso es solo un estado temporal.
-
-3. **Antifragilidad** — El sistema se beneficia del caos. La version del codigo en el minuto 5 es superior a la del minuto 1 gracias a los errores cometidos en el minuto 3.
+```
+src/
+├── app/                      # Next.js App Router
+│   ├── (auth)/               # Rutas de autenticacion
+│   └── (main)/               # Rutas principales
+│
+├── features/                  # Organizadas por funcionalidad
+│   └── [feature]/
+│       ├── components/       # UI de la feature
+│       ├── hooks/            # Logica
+│       ├── services/         # API calls
+│       ├── types/            # Tipos
+│       └── store/            # Estado
+│
+└── shared/                    # Codigo reutilizable
+    ├── components/
+    ├── hooks/
+    ├── lib/
+    └── types/
+```
 
 ---
 
-## Comandos Disponibles
+## 5 Design Systems
 
-### `/new-app` - El Arquitecto
-Actua como **Consultor de Negocio Senior**. Te entrevista y genera `BUSINESS_LOGIC.md` con la especificacion tecnica completa.
-
-### `/landing` - The Money Maker
-Actua como **Copywriter + Disenador**. Crea landing pages de alta conversion validadas visualmente con Playwright.
+| Sistema | Vibe |
+|---------|------|
+| **Neobrutalism** | Bordes duros, colores primarios, sombras offset |
+| **Neumorphism** | Soft UI con sombras suaves |
+| **Liquid Glass** | Glassmorphism con efectos liquidos |
+| **Gradient Mesh** | Gradientes mesh complejos |
+| **Bento Grid** | Layout de grids asimetricos |
 
 ---
 
@@ -217,7 +228,7 @@ Claude Code detecta tu sistema (zsh/bash) y configura todo automaticamente.
 
 ---
 
-## Workflow: De 0 a Produccion
+## De 0 a Produccion
 
 ### 1. Crear proyecto
 ```bash
@@ -228,7 +239,7 @@ saas-factory
 ### 2. Instalar y configurar
 ```bash
 npm install
-cp .env.example .env.local  # Anade credenciales de Supabase
+cp .env.local.example .env.local  # Agrega credenciales de Supabase
 ```
 
 ### 3. Prender el MCP
@@ -258,16 +269,36 @@ La IA usa los MCPs para ver errores en tiempo real mientras construye.
 
 ---
 
+## Auto-Blindaje
+
+Cada error refuerza la fabrica. El mismo error NUNCA ocurre dos veces.
+
+```
+Error ocurre → Se arregla → Se DOCUMENTA → NUNCA ocurre de nuevo
+```
+
+Con el **Memory Manager**, los errores y patrones descubiertos se guardan en `.claude/memory/` y viajan con el proyecto. Tu fabrica se hace mas inteligente con cada sesion.
+
+---
+
 ## FAQ
 
 **Por que solo Next.js?**
 Hace el 100% del trabajo para el 95% de los SaaS B2B. No necesitas Python ni backends separados.
 
-**Por que Email/Password en lugar de OAuth?**
-Evita bloqueos de bots durante testing. OAuth requiere verificacion que complica el desarrollo.
-
 **Puedo personalizar?**
-Si. Todo esta disenado para ser extendido. `CLAUDE.md` es tu punto de entrada.
+Si. Todo esta disenado para ser extendido. `CLAUDE.md` es tu punto de entrada. Crea nuevos skills con `/skill-creator`.
+
+**Como actualizo?**
+```
+/update-sf
+```
+
+**Como remuevo SaaS Factory?**
+```
+/eject-sf
+```
+Te deja con un proyecto Next.js limpio y funcional.
 
 ---
 
@@ -275,16 +306,17 @@ Si. Todo esta disenado para ser extendido. `CLAUDE.md` es tu punto de entrada.
 
 | Archivo | Descripcion |
 |---------|-------------|
-| `CLAUDE.md` | Factory OS - Cerebro del agente |
-| `GEMINI.md` | Espejo para Gemini |
-| `saas-factory/CLAUDE.md` | Factory OS del template interno |
-| `.claude/PRPs/` | Sistema de Blueprints |
-| `.claude/prompts/` | Assembly Line (bucle agentico) |
-| `.claude/commands/` | Comandos disponibles |
+| `saas-factory/CLAUDE.md` | Factory OS — Cerebro del agente (decision tree + skills) |
+| `saas-factory/GEMINI.md` | Espejo para Gemini |
+| `saas-factory/.claude/skills/SKILLS_README.md` | Inventario completo de 22 skills |
+| `saas-factory/.claude/skills/ai/references/` | 11 AI Templates (chat, RAG, vision, tools...) |
+| `saas-factory/.claude/PRPs/` | Sistema de Blueprints |
+| `saas-factory/.claude/design-systems/` | 5 sistemas de diseno |
+| `saas-factory/.claude/memory/` | Memoria persistente del proyecto |
 
 ---
 
 <p align="center">
-  <strong>SaaS Factory</strong> — La fabrica que se fortalece con cada error.<br/>
+  <strong>SaaS Factory V4</strong> — Todo es un Skill. Agent-First. 22 skills. Memoria persistente.<br/>
   De la idea a produccion en minutos, no en meses.
 </p>

@@ -33,8 +33,8 @@ Usuario dice algo
     ├── "Necesito login / registro / autenticacion"
     |       → Ejecutar skill ADD-LOGIN (Supabase auth completo)
     |
-    ├── "Necesito una landing page"
-    |       → Ejecutar skill LANDING (entrevista + diseño + codigo)
+    ├── "Necesito una landing page" / "scroll animation" / "video on scroll"
+    |       → Ejecutar skill LANDING (scroll-stop cinematico + copy de alta conversion)
     |
     ├── "Quiero agregar [feature compleja]" (multiples fases, DB + UI + API)
     |       → Ejecutar skill PRP → humano aprueba → ejecutar BUCLE-AGENTICO
@@ -57,6 +57,15 @@ Usuario dice algo
     ├── "Quiero remover SaaS Factory"
     |       → Ejecutar skill EJECT-SF (DESTRUCTIVO, confirmar antes)
     |
+    ├── "Recuerda que..." / "Guarda esto" / "En que quedamos?"
+    |       → Ejecutar skill MEMORY-MANAGER (memoria persistente del proyecto)
+    |
+    ├── "Genera una imagen / thumbnail / logo / banner"
+    |       → Ejecutar skill IMAGE-GENERATION (OpenRouter + Gemini)
+    |
+    ├── "Optimiza este skill / mejora el skill / autoresearch"
+    |       → Ejecutar skill AUTORESEARCH (loop autonomo de mejora)
+    |
     └── No encaja en nada
             → Usar tu juicio. Si es frontend → agent FRONTEND.
               Si es backend → agent BACKEND.
@@ -73,7 +82,7 @@ Usuario dice algo
 | Skill | Cuando usarlo |
 |-------|---------------|
 | `new-app` | El usuario quiere empezar un proyecto desde cero. Entrevista de negocio que genera BUSINESS_LOGIC.md |
-| `landing` | El usuario necesita una landing page. Entrevista de estilo + generacion completa |
+| `landing` | Landing cinematica estilo Apple: scroll-driven video + copy AIDA/PAS de alta conversion |
 | `primer` | Al inicio de cada conversacion para cargar contexto del proyecto |
 | `add-login` | Agregar autenticacion completa (Email/Password + Google OAuth + profiles + RLS) |
 | `eject-sf` | El usuario quiere remover SaaS Factory del proyecto. DESTRUCTIVO. Confirmar siempre |
@@ -84,6 +93,9 @@ Usuario dice algo
 | `ai` | Implementar capacidades de IA: chat, RAG, vision, tools, web search |
 | `qa` | Testing automatizado con Playwright CLI. Verificar bugs, testear flujos completos |
 | `skill-creator` | Crear nuevos skills para extender la fabrica |
+| `memory-manager` | Memoria persistente POR PROYECTO en `.claude/memory/`. Reemplaza auto-memory de Claude Code |
+| `image-generation` | Generar y editar imagenes con OpenRouter + Gemini |
+| `autoresearch` | Auto-optimizar skills con loop autonomo (patron Karpathy) |
 
 ### Que tu activas automaticamente (el usuario no necesita saber)
 
@@ -265,7 +277,14 @@ npm run lint         # ESLint
 
 ```
 .claude/
-├── skills/                    # Skills 2.0 (V4) - 19 skills
+├── memory/                    # Memoria persistente del proyecto (git-versioned)
+│   ├── MEMORY.md             # Indice (max 200 lineas, se carga al inicio)
+│   ├── user/                 # Sobre el usuario/equipo
+│   ├── feedback/             # Correcciones y preferencias
+│   ├── project/              # Decisiones y estado de iniciativas
+│   └── reference/            # Patrones, soluciones, donde encontrar cosas
+│
+├── skills/                    # Skills 2.0 (V4) - 22 skills
 │   ├── new-app/              # Entrevista de negocio
 │   ├── landing/              # Landing pages
 │   ├── primer/               # Context initialization
@@ -284,7 +303,10 @@ npm run lint         # ESLint
 │   ├── codebase-analyst/     # Agent: analisis
 │   ├── vercel-deployer/      # Agent: deploy
 │   ├── documentacion/        # Agent: docs
-│   └── calidad/              # Agent: testing
+│   ├── calidad/              # Agent: testing
+│   ├── memory-manager/       # Memoria persistente por proyecto
+│   ├── image-generation/     # Generacion de imagenes (OpenRouter + Gemini)
+│   └── autoresearch/         # Auto-optimizacion de skills
 │
 ├── PRPs/                      # Product Requirements Proposals
 │   └── prp-base.md           # Template base

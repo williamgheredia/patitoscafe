@@ -1,113 +1,147 @@
-# 🏭 SaaS Factory V3 - Meta-Documentación del Repositorio
+# SaaS Factory V4 — Meta-Documentacion del Repositorio
 
-> *"La Tesla Factory aplicada al software."*
+> *"Todo es un Skill. Agent-First. El usuario habla, tu construyes."*
 
-## 🎯 Qué es Este Proyecto
+## Que es Este Proyecto
 
-**SaaS Factory** es un sistema de comandos inteligentes para crear aplicaciones production-ready con Claude Code. Es una "fábrica" que genera proyectos completos en minutos.
+**SaaS Factory** es un template factory para crear aplicaciones SaaS production-ready con Claude Code. No es un proyecto — es la **maquina que construye proyectos**.
 
-**Filosofía V3:**
-- **Henry Ford:** Un solo modelo "T" perfeccionado → Un solo stack (Golden Path)
-- **Elon Musk:** La máquina que construye la máquina → Los comandos que construyen el SaaS
-- **Auto-Blindaje:** El sistema se fortalece solo → Cada error es una oportunidad para blindar la fábrica
+**Filosofia V4:**
+- **Henry Ford:** Un solo stack perfeccionado (Golden Path)
+- **Elon Musk:** La maquina que construye la maquina (skills > codigo manual)
+- **Agent-First:** El usuario habla en lenguaje natural, el agente ejecuta
+- **Skills Unificados:** Commands + agents + prompts → un solo concepto: Skills
 
-## 🤖 La Analogía: Tesla Factory
-
-| Componente Tesla | Tu Sistema | Archivo/Herramienta |
-|------------------|------------|---------------------|
-| **Factory OS** | Cerebro del agente | `saas-factory/CLAUDE.md` |
-| **Blueprints** | Especificaciones de features | `.claude/PRPs/*.md` |
-| **Control Room** | Humano que aprueba | Tú preguntas, él valida |
-| **Robot Arms** | Manos (editar código, DB) | Supabase MCP + Terminal |
-| **Eyes/Cameras** | Visión del producto | Playwright MCP |
-| **Quality Control** | Validación automática | Next.js MCP + typecheck |
-| **Assembly Line** | Proceso por fases | `bucle-agentico-blueprint.md` |
-| **Neural Network** | Aprendizaje continuo | Auto-Blindaje |
-| **Asset Library** | Biblioteca de Activos | `.claude/` (Comandos, Skills, Agentes, Diseño) |
-
-## 📦 Estructura del Repositorio
+## Estructura del Repositorio
 
 ```
 saas-factory-setup/
 ├── CLAUDE.md                   # Este archivo (meta-docs del repositorio)
-├── README.md                   # Guía de instalación para usuarios
-├── CHANGELOG.md                # Historial de versiones
+├── README.md                   # Guia de instalacion para usuarios
+├── CHANGELOG.md                # Historial de versiones (V1.0 → V4.0)
+├── assets/                     # Imagenes y diagramas del README
 │
-└── saas-factory/               # El Golden Path (proyecto funcional)
-    ├── CLAUDE.md               # Factory OS - Cerebro del agente
+└── saas-factory/               # El Golden Path (se copia con el alias)
+    ├── CLAUDE.md               # Factory OS — Cerebro del agente
     ├── GEMINI.md               # Espejo para Gemini
-    ├── .mcp.json               # MCPs configurados
-    ├── package.json            # Dependencias pre-instaladas
-    ├── next.config.ts          # Next.js 16 con MCP activado
-    ├── src/                    # Código fuente
-    │   ├── app/                # Next.js App Router
+    ├── .mcp.json               # 3 MCPs configurados
+    ├── package.json            # Next.js 16, React 19, Tailwind 3.4
+    ├── src/                    # Codigo fuente
+    │   ├── app/                # Next.js App Router (route groups)
     │   ├── features/           # Arquitectura Feature-First
-    │   └── shared/             # Libs y componentes
+    │   └── shared/             # Libs y componentes compartidos
     │
     └── .claude/
-        ├── commands/           # Comandos slash (/new-app, /landing)
-        ├── prompts/            # Assembly Line (bucle agéntico)
-        ├── agents/             # Agentes especializados
+        ├── skills/             # 22 Skills (V4) — Core del sistema
+        │   ├── new-app/        # Entrevista de negocio
+        │   ├── landing/        # Landing cinematica scroll-stop + AIDA/PAS
+        │   ├── primer/         # Context initialization
+        │   ├── add-login/      # Auth completo Supabase
+        │   ├── ai/             # 11 AI Templates (chat, RAG, vision, tools...)
+        │   ├── prp/            # Product Requirements Proposals
+        │   ├── bucle-agentico/ # Features complejas por fases
+        │   ├── sprint/         # Tareas rapidas
+        │   ├── playwright-cli/ # QA automatizado
+        │   ├── memory-manager/ # Memoria persistente por proyecto
+        │   ├── image-generation/ # Generacion de imagenes (OpenRouter + Gemini)
+        │   ├── autoresearch/   # Auto-optimizacion de skills (Karpathy)
+        │   ├── skill-creator/  # Crear nuevos skills
+        │   ├── eject-sf/       # Remover SaaS Factory
+        │   ├── update-sf/      # Actualizar version
+        │   ├── backend/        # Agent: Server Actions, APIs
+        │   ├── frontend/       # Agent: React, Tailwind, UI/UX
+        │   ├── supabase-admin/ # Agent: Migraciones, RLS, SQL
+        │   ├── codebase-analyst/ # Agent: Analisis de arquitectura
+        │   ├── vercel-deployer/ # Agent: Deploy a produccion
+        │   ├── documentacion/  # Agent: Mantener docs
+        │   └── calidad/        # Agent: Testing, quality gates
+        │
+        ├── memory/             # Memoria persistente (git-versioned)
+        │   ├── MEMORY.md       # Indice (max 200 lineas)
+        │   ├── user/           # Preferencias del usuario/equipo
+        │   ├── feedback/       # Correcciones y patrones
+        │   ├── project/        # Decisiones activas
+        │   └── reference/      # Donde encontrar cosas
+        │
         ├── PRPs/               # Blueprints de features
-        ├── ai_templates/       # Sistema LEGO para features IA
-        └── skills/             # Skills reutilizables
+        │   └── prp-base.md     # Template base
+        │
+        └── design-systems/     # 5 sistemas de diseno
+            ├── neobrutalism/
+            ├── neumorphism/
+            ├── liquid-glass/
+            ├── gradient-mesh/
+            └── bento-grid/
 ```
 
-## 🚀 Cómo Funciona el Sistema
+## Golden Path (Stack Unico)
 
-### El Alias `saas-factory`
-
-```bash
-alias saas-factory="cp -r [RUTA]/saas-factory/. ."
-```
-
-Copia **TODO el proyecto funcional** al directorio actual:
-- `CLAUDE.md` → Factory OS (cerebro del agente)
-- `.claude/` → Comandos, agentes, PRPs, AI templates
-- `.mcp.json` → MCPs configurados (Next.js, Playwright, Supabase)
-- `src/` → Código fuente con arquitectura Feature-First
-- `package.json` → Dependencias (Next.js 16, React 19, Tailwind 3.4)
-- Configs → TypeScript, ESLint, Tailwind
-
-### El Golden Path (Stack Único)
-
-| Capa | Tecnología |
+| Capa | Tecnologia |
 |------|------------|
 | Frontend | Next.js 16 + React 19 + TypeScript |
 | Estilos | Tailwind CSS 3.4 + shadcn/ui |
-| Backend | Supabase (Auth + PostgreSQL) |
+| Backend | Supabase (Auth + PostgreSQL + RLS) |
 | AI Engine | Vercel AI SDK v5 + OpenRouter |
-| Validación | Zod |
-| State | Zustand |
+| Validacion | Zod |
+| Estado | Zustand |
 | Testing | Playwright MCP |
 | Deploy | Vercel |
 
-## 🧠 V3: Auto-Blindaje
+## Skills: De V3 a V4
 
-> *"Como el acero del Cybertruck: cada error es un impacto que refuerza nuestra estructura. Blindamos el proceso para que la falla nunca se repita."*
+| V3 | V4 |
+|----|-----|
+| `.claude/commands/*.md` | `.claude/skills/*/SKILL.md` |
+| `.claude/agents/*.md` | `.claude/skills/*/SKILL.md` (user-invocable: false, context: fork) |
+| `.claude/prompts/*.md` | `.claude/skills/*/SKILL.md` |
+| `.claude/ai_templates/` | `.claude/skills/ai/references/` |
+| 7 commands + 7 agents + prompts (fragmentado) | 22 skills unificados con YAML metadata |
+| System prompt como "lista de herramientas" | Decision tree: input → skill activation |
 
+### Anatomy de un Skill
+
+```yaml
+---
+name: skill-name
+description: Que hace y cuando activarlo
+argument-hint: "[argumento]"      # Hint en autocomplete
+user-invocable: false             # Solo Claude puede invocarlo
+context: fork                     # Ejecuta en subagent aislado
+allowed-tools: Read, Write, Bash  # Tools permitidos sin pedir permiso
+---
+
+# Instrucciones del skill en markdown
 ```
-Error ocurre → Se arregla → Se DOCUMENTA → NUNCA ocurre de nuevo
-```
 
-**Archivos participantes:**
-- **PRP actual** → Errores específicos de esta feature
-- **`.claude/prompts/*.md`** → Errores que aplican a múltiples features
-- **`CLAUDE.md`** → Errores críticos que aplican a TODO
+### Progressive Disclosure
 
-## 🔧 Workflow de Instalación (Para Claude Code)
+1. **Metadata** (~100 palabras) — Siempre en contexto (frontmatter YAML)
+2. **SKILL.md** (<5k palabras) — Se carga cuando se activa el skill
+3. **Resources** (unlimited) — Bajo demanda (scripts/, references/, assets/)
+
+## Memoria Persistente (Nuevo en V4)
+
+El skill `memory-manager` reemplaza la auto-memory de Claude Code:
+
+- **Vive en el repo** (`.claude/memory/`), no en `~/.claude/`
+- **Git-versioned** — cada cambio es un commit, reversible
+- **Compartida** — cualquiera que clone el repo tiene la memoria
+- **Controlada** — el usuario decide que se guarda, no Claude
+
+La primera activacion deshabilita auto-memory en `.claude/settings.json`.
+
+## Workflow de Instalacion (Para Claude Code)
 
 Cuando un usuario pide ayuda para configurar SaaS Factory:
 
 ### 1. Detectar Sistema
 ```bash
 echo $SHELL  # zsh o bash
-pwd          # Ruta del repo
+pwd           # Ruta del repo
 ```
 
-### 2. Generar y Añadir Alias
+### 2. Generar y Agregar Alias
 ```bash
-# Reemplazar [REPO_PATH] con el resultado de pwd
 echo "alias saas-factory='cp -r [REPO_PATH]/saas-factory/. .'" >> ~/.zshrc
 source ~/.zshrc
 ```
@@ -119,7 +153,7 @@ type saas-factory  # Debe retornar: "is an alias for..."
 
 ### 4. Explicar Uso
 ```
-Configuración completa!
+Configuracion completa!
 
 Para crear un nuevo proyecto:
 1. mkdir mi-proyecto && cd mi-proyecto
@@ -127,33 +161,41 @@ Para crear un nuevo proyecto:
 3. npm install && npm run dev
 4. claude .
 
-Comandos disponibles:
-- /new-app  → Define tu SaaS (genera BUSINESS_LOGIC.md)
-- /landing  → Crea landing pages de alta conversión
+Skills disponibles:
+- /new-app           → Define tu SaaS (genera BUSINESS_LOGIC.md)
+- /landing           → Landing cinematica scroll-stop + copy AIDA/PAS
+- /ai [template]     → Agrega IA (chat, RAG, vision, tools...)
+- /memory-manager    → Activa memoria persistente del proyecto
+- /image-generation  → Genera imagenes con IA
+- /autoresearch      → Auto-optimiza tus skills
 ```
 
-## ❌ Restricciones
+## Restricciones
 
 **Este repositorio NO debe:**
-- Convertirse en un proyecto específico (es un factory)
-- Tener código de aplicación en el root
+- Convertirse en un proyecto especifico (es un factory)
+- Tener codigo de aplicacion en el root
 - Committear `.mcp.json` con secrets (solo `example.mcp.json`)
 
 **Los proyectos generados NO deben:**
-- Usar OAuth para auth inicial (usar Email/Password)
-- Añadir backends separados innecesariamente
-- Sobre-engineerear la primera versión
+- Usar OAuth para auth inicial (usar Email/Password primero)
+- Agregar backends separados innecesariamente
+- Sobre-engineerear la primera version
 
-## 📊 Estado V3
+## Estado V4
 
-**Versión:** 3.1.0
-**Última actualización:** 2025-01-11
+**Version:** 4.0.0
+**Ultima actualizacion:** 2026-03-15
 
-**V3 incluye:**
-- Factory OS con analogía Tesla Factory
-- Sistema Auto-Blindaje (aprendizaje continuo)
-- AI Templates (sistema LEGO modular)
-- Lifecycle commands (/update-sf, /eject-sf)
+**V4 incluye:**
+- 22 skills unificados (reemplaza commands + agents + prompts)
+- Memoria persistente por proyecto (`.claude/memory/`)
+- Landing cinematica scroll-stop + copy AIDA/PAS
+- Image generation con OpenRouter + Gemini
+- Autoresearch: auto-optimizacion de skills (patron Karpathy)
+- 5 design systems
+- 11 AI templates
+- 3 MCPs configurados
 
 ---
 

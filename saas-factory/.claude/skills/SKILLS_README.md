@@ -4,14 +4,14 @@
 
 ---
 
-## Inventario de Skills (19 total)
+## Inventario de Skills (22 total)
 
 ### Invocables por el Usuario (/)
 
 | Skill | Comando | Descripcion |
 |-------|---------|-------------|
 | `new-app` | `/new-app` | Entrevista de negocio → BUSINESS_LOGIC.md |
-| `landing` | `/landing` | Landing page de alta conversion (entrevista + ejecucion) |
+| `landing` | `/landing` | Landing cinematica: scroll-driven video + copy AIDA/PAS + glass-morphism |
 | `primer` | `/primer` | Inicializar contexto del proyecto |
 | `add-login` | `/add-login` | Auth completo Supabase (login, signup, password reset, profiles, RLS) |
 | `eject-sf` | `/eject-sf` | Remover SaaS Factory del proyecto (DESTRUCTIVO) |
@@ -22,6 +22,9 @@
 | `ai` | `/ai [template]` | Implementar AI Templates (chat, RAG, vision, tools) |
 | `qa` | `/qa [descripcion]` | QA automatizado con Playwright CLI |
 | `skill-creator` | `/skill-creator` | Crear nuevos skills |
+| `memory-manager` | `/memory-manager` | Memoria persistente por proyecto (reemplaza auto-memory) |
+| `image-generation` | `/image-generation` | Generar/editar imagenes con OpenRouter + Gemini |
+| `autoresearch` | `/autoresearch [skill]` | Auto-optimizar skills con loop autonomo (Karpathy) |
 
 ### Invocables por Claude (automaticos)
 
@@ -78,6 +81,22 @@ agent: Explore                      # Tipo de agente (opcional)
 1. **Metadata** (~100 palabras) - Siempre en contexto (frontmatter)
 2. **SKILL.md** (<5k palabras) - Cuando se activa
 3. **Resources** (unlimited) - Bajo demanda (scripts/, references/, assets/)
+
+---
+
+## Memoria Persistente (.claude/memory/)
+
+SaaS Factory incluye un sistema de memoria persistente POR PROYECTO que reemplaza la auto-memory de Claude Code.
+
+**Por que?** La auto-memory de Claude Code guarda notas en `~/.claude/projects/` (local a tu maquina). Eso significa que no viaja con el repo, no es versionado, no es compartido con tu equipo, y Claude decide que guardar sin tu control.
+
+**Como funciona:**
+- `.claude/memory/MEMORY.md` es el indice (max 200 lineas, se carga automaticamente)
+- Carpetas por tipo: `user/`, `feedback/`, `project/`, `reference/`
+- Git-versioned: cada cambio es un commit que puedes revertir
+- El skill `memory-manager` gestiona cuando consultar y cuando guardar
+
+**Activacion:** La primera vez que se usa el skill `memory-manager`, automaticamente deshabilita la auto-memory de Claude Code en `.claude/settings.json` y crea la estructura de carpetas.
 
 ---
 
