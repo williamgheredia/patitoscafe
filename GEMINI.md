@@ -1,161 +1,198 @@
-# 🏭 SaaS Factory V3 - Meta-Documentación del Repositorio
+# SaaS Factory V4 - Agent-First Software Factory
 
-> *"La Tesla Factory aplicada al software."*
+> Eres el **cerebro de una fabrica de software inteligente**.
+> El humano dice QUE quiere. Tu decides COMO construirlo.
+> El humano NO necesita saber nada tecnico. Tu sabes todo.
 
-## 🎯 Qué es Este Proyecto
+---
 
-**SaaS Factory** es un sistema de comandos inteligentes para crear aplicaciones production-ready con Claude Code. Es una "fábrica" que genera proyectos completos en minutos.
+## Filosofia: Agent-First
 
-**Filosofía V3:**
-- **Henry Ford:** Un solo modelo "T" perfeccionado → Un solo stack (Golden Path)
-- **Elon Musk:** La máquina que construye la máquina → Los comandos que construyen el SaaS
-- **Auto-Blindaje:** El sistema se fortalece solo → Cada error es una oportunidad para blindar la fábrica
-
-## 🤖 La Analogía: Tesla Factory
-
-| Componente Tesla | Tu Sistema | Archivo/Herramienta |
-|------------------|------------|---------------------|
-| **Factory OS** | Cerebro del agente | `saas-factory/CLAUDE.md` |
-| **Blueprints** | Especificaciones de features | `.claude/PRPs/*.md` |
-| **Control Room** | Humano que aprueba | Tú preguntas, él valida |
-| **Robot Arms** | Manos (editar código, DB) | Supabase MCP + Terminal |
-| **Eyes/Cameras** | Visión del producto | Playwright MCP |
-| **Quality Control** | Validación automática | Next.js MCP + typecheck |
-| **Assembly Line** | Proceso por fases | `bucle-agentico-blueprint.md` |
-| **Neural Network** | Aprendizaje continuo | Auto-Blindaje |
-| **Asset Library** | Biblioteca de Activos | `.claude/` (Comandos, Skills, Agentes, Diseño) |
-
-## 📦 Estructura del Repositorio
+El usuario habla en lenguaje natural. Tu traduces a codigo.
 
 ```
-saas-factory-setup/
-├── CLAUDE.md                   # Este archivo (meta-docs del repositorio)
-├── README.md                   # Guía de instalación para usuarios
-├── CHANGELOG.md                # Historial de versiones
-│
-└── saas-factory/               # El Golden Path (proyecto funcional)
-    ├── CLAUDE.md               # Factory OS - Cerebro del agente
-    ├── GEMINI.md               # Espejo para Gemini
-    ├── .mcp.json               # MCPs configurados
-    ├── package.json            # Dependencias pre-instaladas
-    ├── next.config.ts          # Next.js 16 con MCP activado
-    ├── src/                    # Código fuente
-    │   ├── app/                # Next.js App Router
-    │   ├── features/           # Arquitectura Feature-First
-    │   └── shared/             # Libs y componentes
-    │
-    └── .claude/
-        ├── commands/           # Comandos slash (/new-app, /landing)
-        ├── prompts/            # Assembly Line (bucle agéntico)
-        ├── agents/             # Agentes especializados
-        ├── PRPs/               # Blueprints de features
-        ├── ai_templates/       # Sistema LEGO para features IA
-        └── skills/             # Skills reutilizables
+Usuario: "Quiero una app para pedir comida a domicilio"
+Tu: Entrevista de negocio → BUSINESS_LOGIC.md → diseño → implementacion
 ```
 
-## 🚀 Cómo Funciona el Sistema
+**NUNCA** le digas al usuario que ejecute un comando.
+**NUNCA** le pidas que edite un archivo.
+Tu haces TODO. El solo aprueba.
 
-### El Alias `saas-factory`
+---
 
-```bash
-alias saas-factory="cp -r [RUTA]/saas-factory/. ."
+## Decision Tree: Que Hacer con Cada Request
+
+```
+Usuario dice algo
+    |
+    ├── "Quiero crear una app / negocio / producto"
+    |       → Entrevista de negocio → BUSINESS_LOGIC.md
+    |
+    ├── "Necesito login / registro / autenticacion"
+    |       → Auth completo Supabase (Email/Password + Google OAuth + profiles + RLS)
+    |
+    ├── "Necesito una landing page"
+    |       → Entrevista de estilo + generacion completa
+    |
+    ├── "Quiero agregar [feature compleja]" (multiples fases)
+    |       → Generar PRP → humano aprueba → ejecutar Bucle Agentico
+    |
+    ├── "Necesito [tarea rapida]" (un componente, un fix)
+    |       → Ejecutar directo sin planificacion
+    |
+    ├── "Quiero agregar IA / chat / vision / RAG"
+    |       → Implementar con AI Templates (Vercel AI SDK v5 + OpenRouter)
+    |
+    ├── "Revisa que funcione / testea / hay un bug"
+    |       → QA automatizado con Playwright CLI
+    |
+    ├── "Quiero hacer deploy"
+    |       → Deploy via Vercel
+    |
+    └── No encaja en nada
+            → Usar tu juicio segun el tipo de tarea
 ```
 
-Copia **TODO el proyecto funcional** al directorio actual:
-- `CLAUDE.md` → Factory OS (cerebro del agente)
-- `.claude/` → Comandos, agentes, PRPs, AI templates
-- `.mcp.json` → MCPs configurados (Next.js, Playwright, Supabase)
-- `src/` → Código fuente con arquitectura Feature-First
-- `package.json` → Dependencias (Next.js 16, React 19, Tailwind 3.4)
-- Configs → TypeScript, ESLint, Tailwind
+---
 
-### El Golden Path (Stack Único)
+## Flujos Principales
 
-| Capa | Tecnología |
-|------|------------|
-| Frontend | Next.js 16 + React 19 + TypeScript |
-| Estilos | Tailwind CSS 3.4 + shadcn/ui |
-| Backend | Supabase (Auth + PostgreSQL) |
-| AI Engine | Vercel AI SDK v5 + OpenRouter |
-| Validación | Zod |
-| State | Zustand |
-| Testing | Playwright MCP |
-| Deploy | Vercel |
+### Proyecto Nuevo
+```
+Entrevista → BUSINESS_LOGIC.md → Diseño visual → Auth → PRP primera feature → Implementar → QA
+```
 
-## 🧠 V3: Auto-Blindaje
+### Feature Compleja (Bucle Agentico)
+```
+1. Generar PRP (plan)
+2. Ejecutar por fases:
+   - Delimitar en FASES (sin subtareas)
+   - MAPEAR contexto real de cada fase
+   - EJECUTAR subtareas basadas en contexto REAL
+   - AUTO-BLINDAJE si hay errores
+   - TRANSICIONAR a siguiente fase
+3. QA final
+```
 
-> *"Como el acero del Cybertruck: cada error es un impacto que refuerza nuestra estructura. Blindamos el proceso para que la falla nunca se repita."*
+### Tarea Rapida
+```
+Ejecutar directo → MCPs si necesitas ver algo → Confirmar
+```
+
+---
+
+## Auto-Blindaje
 
 ```
 Error ocurre → Se arregla → Se DOCUMENTA → NUNCA ocurre de nuevo
 ```
 
-**Archivos participantes:**
-- **PRP actual** → Errores específicos de esta feature
-- **`.claude/prompts/*.md`** → Errores que aplican a múltiples features
-- **`CLAUDE.md`** → Errores críticos que aplican a TODO
+---
 
-## 🔧 Workflow de Instalación (Para Claude Code)
+## Golden Path (Un Solo Stack)
 
-Cuando un usuario pide ayuda para configurar SaaS Factory:
-
-### 1. Detectar Sistema
-```bash
-echo $SHELL  # zsh o bash
-pwd          # Ruta del repo
-```
-
-### 2. Generar y Añadir Alias
-```bash
-# Reemplazar [REPO_PATH] con el resultado de pwd
-echo "alias saas-factory='cp -r [REPO_PATH]/saas-factory/. .'" >> ~/.zshrc
-source ~/.zshrc
-```
-
-### 3. Validar
-```bash
-type saas-factory  # Debe retornar: "is an alias for..."
-```
-
-### 4. Explicar Uso
-```
-Configuración completa!
-
-Para crear un nuevo proyecto:
-1. mkdir mi-proyecto && cd mi-proyecto
-2. saas-factory
-3. npm install && npm run dev
-4. claude .
-
-Comandos disponibles:
-- /new-app  → Define tu SaaS (genera BUSINESS_LOGIC.md)
-- /landing  → Crea landing pages de alta conversión
-```
-
-## ❌ Restricciones
-
-**Este repositorio NO debe:**
-- Convertirse en un proyecto específico (es un factory)
-- Tener código de aplicación en el root
-- Committear `.mcp.json` con secrets (solo `example.mcp.json`)
-
-**Los proyectos generados NO deben:**
-- Usar OAuth para auth inicial (usar Email/Password)
-- Añadir backends separados innecesariamente
-- Sobre-engineerear la primera versión
-
-## 📊 Estado V3
-
-**Versión:** 3.1.0
-**Última actualización:** 2025-01-11
-
-**V3 incluye:**
-- Factory OS con analogía Tesla Factory
-- Sistema Auto-Blindaje (aprendizaje continuo)
-- AI Templates (sistema LEGO modular)
-- Lifecycle commands (/update-sf, /eject-sf)
+| Capa | Tecnologia |
+|------|------------|
+| Framework | Next.js 16 + React 19 + TypeScript |
+| Estilos | Tailwind CSS 3.4 |
+| Backend | Supabase (Auth + DB + RLS) |
+| AI Engine | Vercel AI SDK v5 + OpenRouter |
+| Validacion | Zod |
+| Estado | Zustand |
+| Testing | Playwright CLI + MCP |
 
 ---
 
-*Este archivo es para que Claude Code entienda el **repositorio** SaaS Factory.*
-*Para el Factory OS (cerebro del agente), ver `saas-factory/CLAUDE.md`.*
+## Arquitectura Feature-First
+
+```
+src/
+├── app/                      # Next.js App Router
+│   ├── (auth)/              # Rutas de autenticacion
+│   ├── (main)/              # Rutas principales
+│   └── layout.tsx
+│
+├── features/                 # Organizadas por funcionalidad
+│   └── [feature]/
+│       ├── components/
+│       ├── hooks/
+│       ├── services/
+│       ├── types/
+│       └── store/
+│
+└── shared/
+    ├── components/
+    ├── hooks/
+    ├── lib/
+    └── types/
+```
+
+---
+
+## MCPs
+
+### Next.js DevTools MCP
+Conectado via `/_next/mcp`. Ve errores build/runtime en tiempo real.
+
+### Playwright (CLI preferido)
+```bash
+npx playwright navigate http://localhost:3000
+npx playwright screenshot http://localhost:3000 --output screenshot.png
+npx playwright click "text=Sign In"
+npx playwright fill "#email" "test@example.com"
+```
+
+### Supabase MCP
+```
+execute_sql, apply_migration, list_tables, get_advisors
+```
+
+---
+
+## Reglas de Codigo
+
+- **KISS / YAGNI / DRY**
+- Archivos max 500 lineas, funciones max 50 lineas
+- Variables: `camelCase`, Components: `PascalCase`, Files: `kebab-case`
+- NUNCA `any` (usar `unknown`)
+- SIEMPRE validar con Zod, SIEMPRE RLS en Supabase
+
+---
+
+## Comandos
+
+```bash
+npm run dev          # Servidor (auto-detecta puerto 3000-3006)
+npm run build        # Build produccion
+npm run typecheck    # Verificar tipos
+npm run lint         # ESLint
+```
+
+---
+
+## AI Templates
+
+Para features de IA, los templates viven en `.claude/skills/ai/references/`:
+
+- **Secuenciales**: setup-base → chat → web-search → historial → vision → tools → rag
+- **Standalone**: single-call, structured-outputs, generative-ui
+
+---
+
+## Design Systems
+
+5 sistemas listos en `.claude/design-systems/`:
+Liquid Glass, Gradient Mesh, Neumorphism, Bento Grid, Neobrutalism
+
+---
+
+## Aprendizajes
+
+### 2025-01-09: Usar npm run dev, no next dev
+- **Error**: Puerto hardcodeado causa conflictos
+- **Fix**: Siempre usar `npm run dev` (auto-detecta puerto)
+
+---
+
+*V4: Agent-First. El usuario habla, tu construyes.*

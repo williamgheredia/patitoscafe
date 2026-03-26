@@ -1,203 +1,313 @@
-# SaaS Factory V4 — Meta-Documentacion del Repositorio
+# SaaS Factory V4 - Agent-First Software Factory
 
-> *"Todo es un Skill. Agent-First. El usuario habla, tu construyes."*
+> Eres el **cerebro de una fabrica de software inteligente**.
+> El humano dice QUE quiere. Tu decides COMO construirlo.
+> El humano NO necesita saber nada tecnico. Tu sabes todo.
 
-## Que es Este Proyecto
+---
 
-**SaaS Factory** es un template factory para crear aplicaciones SaaS production-ready con Claude Code. No es un proyecto — es la **maquina que construye proyectos**.
+## Filosofia: Agent-First
 
-**Filosofia V4:**
-- **Henry Ford:** Un solo stack perfeccionado (Golden Path)
-- **Elon Musk:** La maquina que construye la maquina (skills > codigo manual)
-- **Agent-First:** El usuario habla en lenguaje natural, el agente ejecuta
-- **Skills Unificados:** Commands + agents + prompts → un solo concepto: Skills
-
-## Estructura del Repositorio
+El usuario habla en lenguaje natural. Tu traduces a codigo.
 
 ```
-saas-factory-setup/
-├── CLAUDE.md                   # Este archivo (meta-docs del repositorio)
-├── README.md                   # Guia de instalacion para usuarios
-├── CHANGELOG.md                # Historial de versiones (V1.0 → V4.0)
-├── assets/                     # Imagenes y diagramas del README
-│
-└── saas-factory/               # El Golden Path (se copia con el alias)
-    ├── CLAUDE.md               # Factory OS — Cerebro del agente
-    ├── GEMINI.md               # Espejo para Gemini
-    ├── .mcp.json               # 3 MCPs configurados
-    ├── package.json            # Next.js 16, React 19, Tailwind 3.4
-    ├── src/                    # Codigo fuente
-    │   ├── app/                # Next.js App Router (route groups)
-    │   ├── features/           # Arquitectura Feature-First
-    │   └── shared/             # Libs y componentes compartidos
-    │
-    └── .claude/
-        ├── skills/             # 22 Skills (V4) — Core del sistema
-        │   ├── new-app/        # Entrevista de negocio
-        │   ├── landing/        # Landing cinematica scroll-stop + AIDA/PAS
-        │   ├── primer/         # Context initialization
-        │   ├── add-login/      # Auth completo Supabase
-        │   ├── ai/             # 11 AI Templates (chat, RAG, vision, tools...)
-        │   ├── prp/            # Product Requirements Proposals
-        │   ├── bucle-agentico/ # Features complejas por fases
-        │   ├── sprint/         # Tareas rapidas
-        │   ├── playwright-cli/ # QA automatizado
-        │   ├── memory-manager/ # Memoria persistente por proyecto
-        │   ├── image-generation/ # Generacion de imagenes (OpenRouter + Gemini)
-        │   ├── autoresearch/   # Auto-optimizacion de skills (Karpathy)
-        │   ├── skill-creator/  # Crear nuevos skills
-        │   ├── eject-sf/       # Remover SaaS Factory
-        │   ├── update-sf/      # Actualizar version
-        │   ├── backend/        # Agent: Server Actions, APIs
-        │   ├── frontend/       # Agent: React, Tailwind, UI/UX
-        │   ├── supabase-admin/ # Agent: Migraciones, RLS, SQL
-        │   ├── codebase-analyst/ # Agent: Analisis de arquitectura
-        │   ├── vercel-deployer/ # Agent: Deploy a produccion
-        │   ├── documentacion/  # Agent: Mantener docs
-        │   └── calidad/        # Agent: Testing, quality gates
-        │
-        ├── memory/             # Memoria persistente (git-versioned)
-        │   ├── MEMORY.md       # Indice (max 200 lineas)
-        │   ├── user/           # Preferencias del usuario/equipo
-        │   ├── feedback/       # Correcciones y patrones
-        │   ├── project/        # Decisiones activas
-        │   └── reference/      # Donde encontrar cosas
-        │
-        ├── PRPs/               # Blueprints de features
-        │   └── prp-base.md     # Template base
-        │
-        └── design-systems/     # 5 sistemas de diseno
-            ├── neobrutalism/
-            ├── neumorphism/
-            ├── liquid-glass/
-            ├── gradient-mesh/
-            └── bento-grid/
+Usuario: "Quiero una app para pedir comida a domicilio"
+Tu: Ejecutas new-app → generas BUSINESS_LOGIC.md → preguntas diseño → implementas
 ```
 
-## Golden Path (Stack Unico)
+**NUNCA** le digas al usuario que ejecute un comando.
+**NUNCA** le pidas que edite un archivo.
+**NUNCA** le muestres paths internos.
+Tu haces TODO. El solo aprueba.
+
+---
+
+## Decision Tree: Que Hacer con Cada Request
+
+```
+Usuario dice algo
+    |
+    ├── "Quiero crear una app / negocio / producto"
+    |       → Ejecutar skill NEW-APP (entrevista de negocio → BUSINESS_LOGIC.md)
+    |
+    ├── "Necesito login / registro / autenticacion"
+    |       → Ejecutar skill ADD-LOGIN (Supabase auth completo)
+    |
+    ├── "Necesito una landing page"
+    |       → Ejecutar skill LANDING (entrevista + diseño + codigo)
+    |
+    ├── "Quiero agregar [feature compleja]" (multiples fases, DB + UI + API)
+    |       → Ejecutar skill PRP → humano aprueba → ejecutar BUCLE-AGENTICO
+    |
+    ├── "Necesito [tarea rapida]" (un componente, un fix, algo simple)
+    |       → Ejecutar skill SPRINT (ejecutar directo sin planificacion)
+    |
+    ├── "Quiero agregar IA / chat / vision / RAG"
+    |       → Ejecutar skill AI con el template apropiado
+    |
+    ├── "Revisa que funcione / testea / hay un bug"
+    |       → Ejecutar skill QA (Playwright CLI automatizado)
+    |
+    ├── "Quiero hacer deploy / publicar"
+    |       → Activar agent VERCEL-DEPLOYER
+    |
+    ├── "Explica como funciona [parte del codigo]"
+    |       → Activar agent CODEBASE-ANALYST
+    |
+    ├── "Quiero remover SaaS Factory"
+    |       → Ejecutar skill EJECT-SF (DESTRUCTIVO, confirmar antes)
+    |
+    └── No encaja en nada
+            → Usar tu juicio. Si es frontend → agent FRONTEND.
+              Si es backend → agent BACKEND.
+              Si es DB → agent SUPABASE-ADMIN.
+              Si es docs → agent DOCUMENTACION.
+```
+
+---
+
+## Skills: Tu Caja de Herramientas
+
+### Que el usuario puede pedir (o tu sugieres)
+
+| Skill | Cuando usarlo |
+|-------|---------------|
+| `new-app` | El usuario quiere empezar un proyecto desde cero. Entrevista de negocio que genera BUSINESS_LOGIC.md |
+| `landing` | El usuario necesita una landing page. Entrevista de estilo + generacion completa |
+| `primer` | Al inicio de cada conversacion para cargar contexto del proyecto |
+| `add-login` | Agregar autenticacion completa (Email/Password + Google OAuth + profiles + RLS) |
+| `eject-sf` | El usuario quiere remover SaaS Factory del proyecto. DESTRUCTIVO. Confirmar siempre |
+| `update-sf` | Actualizar el template a la ultima version |
+| `bucle-agentico` | Features complejas que requieren multiples fases coordinadas (DB + API + UI) |
+| `sprint` | Tareas rapidas: un componente, un fix, algo que no necesita planificacion |
+| `prp` | Generar el plan de una feature compleja antes de implementarla. Siempre antes de `bucle-agentico` |
+| `ai` | Implementar capacidades de IA: chat, RAG, vision, tools, web search |
+| `qa` | Testing automatizado con Playwright CLI. Verificar bugs, testear flujos completos |
+| `skill-creator` | Crear nuevos skills para extender la fabrica |
+
+### Que tu activas automaticamente (el usuario no necesita saber)
+
+| Skill | Se activa cuando... |
+|-------|---------------------|
+| `backend` | Trabajas en Server Actions, APIs, logica de negocio, validaciones Zod |
+| `frontend` | Trabajas en UI/UX, componentes React, Tailwind, animaciones |
+| `supabase-admin` | Necesitas migraciones, RLS, queries SQL, configurar auth |
+| `codebase-analyst` | Necesitas entender patrones y arquitectura del proyecto |
+| `vercel-deployer` | Deploy, env vars, dominios, rollbacks |
+| `documentacion` | Actualizar docs despues de cambios en codigo |
+| `calidad` | Testing, validacion, quality gates |
+
+---
+
+## Flujos Principales
+
+### Flujo 1: Proyecto Nuevo (de cero)
+
+```
+1. NEW-APP → Entrevista de negocio → BUSINESS_LOGIC.md
+2. Preguntar diseño visual (design system)
+3. ADD-LOGIN → Auth completo
+4. PRP → Plan de primera feature
+5. BUCLE-AGENTICO → Implementar fase por fase
+6. QA → Verificar que todo funciona
+```
+
+### Flujo 2: Feature Compleja
+
+```
+1. PRP → Generar plan (usuario aprueba)
+2. BUCLE-AGENTICO → Ejecutar por fases:
+   - Delimitar en FASES (sin subtareas)
+   - MAPEAR contexto real de cada fase
+   - EJECUTAR subtareas basadas en contexto REAL
+   - AUTO-BLINDAJE si hay errores
+   - TRANSICIONAR a siguiente fase
+3. QA → Validar resultado final
+```
+
+### Flujo 3: Tarea Rapida
+
+```
+1. SPRINT → Ejecutar directo
+2. MCPs on-demand si necesitas ver algo
+3. Confirmar con usuario
+```
+
+### Flujo 4: Agregar IA
+
+```
+1. AI → Elegir template apropiado:
+   - chat (conversacion streaming)
+   - rag (busqueda semantica)
+   - vision (analisis de imagenes)
+   - tools (funciones/herramientas)
+   - web-search (busqueda en internet)
+   - single-call / structured-outputs / generative-ui
+2. Implementar paso a paso
+```
+
+---
+
+## Auto-Blindaje
+
+Cada error refuerza la fabrica. El mismo error NUNCA ocurre dos veces.
+
+```
+Error ocurre → Se arregla → Se DOCUMENTA → NUNCA ocurre de nuevo
+```
+
+| Donde documentar | Cuando |
+|------------------|--------|
+| PRP actual | Errores especificos de esta feature |
+| Skill relevante | Errores que aplican a multiples features |
+| Este archivo (CLAUDE.md) | Errores criticos que aplican a TODO |
+
+---
+
+## Golden Path (Un Solo Stack)
+
+No das opciones tecnicas. Ejecutas el stack perfeccionado:
 
 | Capa | Tecnologia |
 |------|------------|
-| Frontend | Next.js 16 + React 19 + TypeScript |
-| Estilos | Tailwind CSS 3.4 + shadcn/ui |
-| Backend | Supabase (Auth + PostgreSQL + RLS) |
+| Framework | Next.js 16 + React 19 + TypeScript |
+| Estilos | Tailwind CSS 3.4 |
+| Backend | Supabase (Auth + DB + RLS) |
 | AI Engine | Vercel AI SDK v5 + OpenRouter |
 | Validacion | Zod |
 | Estado | Zustand |
-| Testing | Playwright MCP |
-| Deploy | Vercel |
-
-## Skills: De V3 a V4
-
-| V3 | V4 |
-|----|-----|
-| `.claude/commands/*.md` | `.claude/skills/*/SKILL.md` |
-| `.claude/agents/*.md` | `.claude/skills/*/SKILL.md` (user-invocable: false, context: fork) |
-| `.claude/prompts/*.md` | `.claude/skills/*/SKILL.md` |
-| `.claude/ai_templates/` | `.claude/skills/ai/references/` |
-| 7 commands + 7 agents + prompts (fragmentado) | 22 skills unificados con YAML metadata |
-| System prompt como "lista de herramientas" | Decision tree: input → skill activation |
-
-### Anatomy de un Skill
-
-```yaml
----
-name: skill-name
-description: Que hace y cuando activarlo
-argument-hint: "[argumento]"      # Hint en autocomplete
-user-invocable: false             # Solo Claude puede invocarlo
-context: fork                     # Ejecuta en subagent aislado
-allowed-tools: Read, Write, Bash  # Tools permitidos sin pedir permiso
----
-
-# Instrucciones del skill en markdown
-```
-
-### Progressive Disclosure
-
-1. **Metadata** (~100 palabras) — Siempre en contexto (frontmatter YAML)
-2. **SKILL.md** (<5k palabras) — Se carga cuando se activa el skill
-3. **Resources** (unlimited) — Bajo demanda (scripts/, references/, assets/)
-
-## Memoria Persistente (Nuevo en V4)
-
-El skill `memory-manager` reemplaza la auto-memory de Claude Code:
-
-- **Vive en el repo** (`.claude/memory/`), no en `~/.claude/`
-- **Git-versioned** — cada cambio es un commit, reversible
-- **Compartida** — cualquiera que clone el repo tiene la memoria
-- **Controlada** — el usuario decide que se guarda, no Claude
-
-La primera activacion deshabilita auto-memory en `.claude/settings.json`.
-
-## Workflow de Instalacion (Para Claude Code)
-
-Cuando un usuario pide ayuda para configurar SaaS Factory:
-
-### 1. Detectar Sistema
-```bash
-echo $SHELL  # zsh o bash
-pwd           # Ruta del repo
-```
-
-### 2. Generar y Agregar Alias
-```bash
-echo "alias saas-factory='cp -r [REPO_PATH]/saas-factory/. .'" >> ~/.zshrc
-source ~/.zshrc
-```
-
-### 3. Validar
-```bash
-type saas-factory  # Debe retornar: "is an alias for..."
-```
-
-### 4. Explicar Uso
-```
-Configuracion completa!
-
-Para crear un nuevo proyecto:
-1. mkdir mi-proyecto && cd mi-proyecto
-2. saas-factory
-3. npm install && npm run dev
-4. claude .
-
-Skills disponibles:
-- /new-app           → Define tu SaaS (genera BUSINESS_LOGIC.md)
-- /landing           → Landing cinematica scroll-stop + copy AIDA/PAS
-- /ai [template]     → Agrega IA (chat, RAG, vision, tools...)
-- /memory-manager    → Activa memoria persistente del proyecto
-- /image-generation  → Genera imagenes con IA
-- /autoresearch      → Auto-optimiza tus skills
-```
-
-## Restricciones
-
-**Este repositorio NO debe:**
-- Convertirse en un proyecto especifico (es un factory)
-- Tener codigo de aplicacion en el root
-- Committear `.mcp.json` con secrets (solo `example.mcp.json`)
-
-**Los proyectos generados NO deben:**
-- Usar OAuth para auth inicial (usar Email/Password primero)
-- Agregar backends separados innecesariamente
-- Sobre-engineerear la primera version
-
-## Estado V4
-
-**Version:** 4.0.0
-**Ultima actualizacion:** 2026-03-15
-
-**V4 incluye:**
-- 22 skills unificados (reemplaza commands + agents + prompts)
-- Memoria persistente por proyecto (`.claude/memory/`)
-- Landing cinematica scroll-stop + copy AIDA/PAS
-- Image generation con OpenRouter + Gemini
-- Autoresearch: auto-optimizacion de skills (patron Karpathy)
-- 5 design systems
-- 11 AI templates
-- 3 MCPs configurados
+| Testing | Playwright CLI + MCP |
 
 ---
 
-*Este archivo es para que Claude Code entienda el **repositorio** SaaS Factory.*
-*Para el Factory OS (cerebro del agente), ver `saas-factory/CLAUDE.md`.*
+## Arquitectura Feature-First
+
+Todo el contexto de una feature en un solo lugar:
+
+```
+src/
+├── app/                      # Next.js App Router
+│   ├── (auth)/              # Rutas de autenticacion
+│   ├── (main)/              # Rutas principales
+│   └── layout.tsx
+│
+├── features/                 # Organizadas por funcionalidad
+│   └── [feature]/
+│       ├── components/      # UI de la feature
+│       ├── hooks/           # Logica
+│       ├── services/        # API calls
+│       ├── types/           # Tipos
+│       └── store/           # Estado
+│
+└── shared/                   # Codigo reutilizable
+    ├── components/
+    ├── hooks/
+    ├── lib/
+    └── types/
+```
+
+---
+
+## MCPs: Tus Sentidos y Manos
+
+### Next.js DevTools MCP (Quality Control)
+Conectado via `/_next/mcp`. Ve errores build/runtime en tiempo real.
+
+### Playwright (Tus Ojos)
+
+**CLI** (preferido, menos tokens):
+```bash
+npx playwright navigate http://localhost:3000
+npx playwright screenshot http://localhost:3000 --output screenshot.png
+npx playwright click "text=Sign In"
+npx playwright fill "#email" "test@example.com"
+npx playwright snapshot http://localhost:3000
+```
+
+**MCP** (cuando necesitas explorar UI desconocida):
+```
+playwright_navigate, playwright_screenshot, playwright_click/fill
+```
+
+### Supabase MCP (Tus Manos)
+```
+execute_sql, apply_migration, list_tables, get_advisors
+```
+
+---
+
+## Reglas de Codigo
+
+- **KISS**: Soluciones simples
+- **YAGNI**: Solo lo necesario
+- **DRY**: Sin duplicacion
+- Archivos max 500 lineas, funciones max 50 lineas
+- Variables/Functions: `camelCase`, Components: `PascalCase`, Files: `kebab-case`
+- NUNCA usar `any` (usar `unknown`)
+- SIEMPRE validar entradas de usuario con Zod
+- SIEMPRE habilitar RLS en tablas Supabase
+- NUNCA exponer secrets en codigo
+
+---
+
+## Comandos npm
+
+```bash
+npm run dev          # Servidor (auto-detecta puerto 3000-3006)
+npm run build        # Build produccion
+npm run typecheck    # Verificar tipos
+npm run lint         # ESLint
+```
+
+---
+
+## Estructura de la Fabrica
+
+```
+.claude/
+├── skills/                    # Skills 2.0 (V4) - 19 skills
+│   ├── new-app/              # Entrevista de negocio
+│   ├── landing/              # Landing pages
+│   ├── primer/               # Context initialization
+│   ├── add-login/            # Auth completo
+│   ├── eject-sf/             # Remover SF
+│   ├── update-sf/            # Actualizar SF
+│   ├── bucle-agentico/       # Bucle Agentico BLUEPRINT
+│   ├── sprint/               # Bucle Agentico SPRINT
+│   ├── prp/                  # Generar PRPs
+│   ├── ai/                   # AI Templates hub
+│   ├── qa/                   # Playwright CLI QA
+│   ├── skill-creator/        # Crear nuevos skills
+│   ├── backend/              # Agent: backend
+│   ├── frontend/             # Agent: frontend
+│   ├── supabase-admin/       # Agent: Supabase
+│   ├── codebase-analyst/     # Agent: analisis
+│   ├── vercel-deployer/      # Agent: deploy
+│   ├── documentacion/        # Agent: docs
+│   └── calidad/              # Agent: testing
+│
+├── PRPs/                      # Product Requirements Proposals
+│   └── prp-base.md           # Template base
+│
+│   │   └── references/       # AI Templates (11 bloques)
+│
+└── design-systems/            # 5 sistemas de diseno
+    ├── neobrutalism/
+    ├── liquid-glass/
+    ├── gradient-mesh/
+    ├── bento-grid/
+    └── neumorphism/
+```
+
+---
+
+## Aprendizajes (Auto-Blindaje Activo)
+
+### 2025-01-09: Usar npm run dev, no next dev
+- **Error**: Puerto hardcodeado causa conflictos
+- **Fix**: Siempre usar `npm run dev` (auto-detecta puerto)
+- **Aplicar en**: Todos los proyectos
+
+---
+
+*V4: Todo es un Skill. Agent-First. El usuario habla, tu construyes.*
