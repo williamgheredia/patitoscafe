@@ -12,7 +12,7 @@ async function requireStaff() {
 
 // --- Products ---
 
-export async function createProduct(formData: FormData) {
+export async function createProduct(formData: FormData): Promise<string> {
   await requireStaff()
   const supabase = createAdminClient()
 
@@ -21,7 +21,7 @@ export async function createProduct(formData: FormData) {
     ? saboresRaw.split(",").map((s) => s.trim()).filter(Boolean)
     : []
 
-  const { error } = await supabase.from("products").insert({
+  const { data, error } = await supabase.from("products").insert({
     category_id: formData.get("category_id") as string,
     name: formData.get("name") as string,
     description: (formData.get("description") as string) || null,
@@ -30,11 +30,12 @@ export async function createProduct(formData: FormData) {
     precio_unico: formData.get("precio_unico") ? Number(formData.get("precio_unico")) : null,
     sabores,
     is_available: true,
-  })
+  }).select("id").single()
 
   if (error) throw error
   revalidatePath("/")
   revalidatePath("/staff/admin")
+  return data.id
 }
 
 export async function updateProduct(id: string, formData: FormData) {
