@@ -26,47 +26,64 @@ export default async function CategoryPage({
   ])
 
   return (
-    <div className="min-h-screen bg-[#FFF8F0] pb-24">
+    <div className="min-h-screen bg-[#FFF8F0] pb-28">
       <MenuHeader />
 
-      <div className="max-w-lg mx-auto px-4 py-4">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-2 mb-4">
-          <Link
-            href="/"
-            className="text-sm text-[#3D2B1F]/50 hover:text-[#F4A261] transition-colors"
-          >
-            ← Menú
-          </Link>
-        </div>
-
-        {/* Category header */}
+      <div className="max-w-lg mx-auto">
+        {/* Category banner */}
         <div
-          className="rounded-2xl p-4 mb-6 flex items-center gap-3"
-          style={{ backgroundColor: `${category.color}40` }}
+          className="relative mx-4 mt-4 rounded-[24px] overflow-hidden"
+          style={{ backgroundColor: `${category.color}50` }}
         >
-          <span className="text-4xl">{category.emoji}</span>
-          <div>
-            <h2 className="text-xl font-bold text-[#3D2B1F]">{category.name}</h2>
-            <p className="text-sm text-[#3D2B1F]/60">
-              {products.length} {products.length === 1 ? "producto" : "productos"}
-            </p>
+          {/* Decorative shapes */}
+          <div
+            className="absolute -top-10 -right-10 w-32 h-32 rounded-full opacity-20"
+            style={{ backgroundColor: category.color ?? undefined }}
+          />
+          <div
+            className="absolute -bottom-8 -left-8 w-24 h-24 rounded-full opacity-15"
+            style={{ backgroundColor: category.color ?? undefined }}
+          />
+
+          <div className="relative px-6 py-6">
+            {/* Back link */}
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1 text-[11px] font-bold text-[#3D2B1F]/40 hover:text-[#F4A261] transition-colors mb-4 uppercase tracking-wider"
+            >
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+              </svg>
+              Menú
+            </Link>
+
+            <div className="flex items-center gap-4">
+              <span className="text-5xl">{category.emoji}</span>
+              <div>
+                <h2 className="font-[family-name:var(--font-display)] text-2xl font-black text-[#3D2B1F] tracking-tight italic leading-tight">
+                  {category.name}
+                </h2>
+                <p className="text-xs text-[#3D2B1F]/45 font-bold mt-1">
+                  {products.length} {products.length === 1 ? "producto" : "productos"}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Order summary */}
-        <OrderSummary />
+        {/* Content */}
+        <div className="px-4 pt-5">
+          <OrderSummary />
 
-        {/* Products */}
-        <ProductList
-          products={products}
-          categoryColor={category.color ?? "#f5f5f5"}
-          categoryEmoji={category.emoji ?? "🐥"}
-          extras={extras}
-        />
+          <ProductList
+            products={products}
+            categoryColor={category.color ?? "#f5f5f5"}
+            categoryEmoji={category.emoji ?? "🐥"}
+            extras={extras}
+          />
+        </div>
       </div>
 
-      {/* WhatsApp sticky button */}
       <WhatsAppButton />
     </div>
   )

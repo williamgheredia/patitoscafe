@@ -7,9 +7,11 @@ import { useOrderStore } from "../store/order-store"
 export function AddToOrder({
   product,
   extras,
+  onAdded,
 }: {
   product: Product
   extras: Extra[]
+  onAdded?: () => void
 }) {
   const addItem = useOrderStore((s) => s.addItem)
 
@@ -17,9 +19,7 @@ export function AddToOrder({
   const hasSabores = product.sabores.length > 0
 
   const defaultSize = hasSize
-    ? product.precio_m !== null
-      ? "M"
-      : "G"
+    ? product.precio_m !== null ? "M" : "G"
     : null
 
   const [size, setSize] = useState<"M" | "G" | null>(defaultSize as "M" | "G" | null)
@@ -61,87 +61,110 @@ export function AddToOrder({
       price: getPrice(),
     })
     setShowConfirm(true)
-    setTimeout(() => setShowConfirm(false), 2000)
+    setTimeout(() => {
+      setShowConfirm(false)
+      onAdded?.()
+    }, 800)
   }
 
   if (!product.is_available) return null
 
   return (
-    <div className="mt-3 space-y-3">
+    <div className="space-y-4">
       {/* Size selector */}
       {hasSize && (
-        <div className="flex gap-2">
-          {product.precio_m !== null && (
-            <button
-              onClick={() => setSize("M")}
-              className={`flex-1 py-2 rounded-xl text-sm font-bold transition-all ${
-                size === "M"
-                  ? "bg-[#F4A261] text-white"
-                  : "bg-white/60 text-[#3D2B1F]/70"
-              }`}
-            >
-              M — ${product.precio_m}
-            </button>
-          )}
-          {product.precio_g !== null && (
-            <button
-              onClick={() => setSize("G")}
-              className={`flex-1 py-2 rounded-xl text-sm font-bold transition-all ${
-                size === "G"
-                  ? "bg-[#F4A261] text-white"
-                  : "bg-white/60 text-[#3D2B1F]/70"
-              }`}
-            >
-              G — ${product.precio_g}
-            </button>
-          )}
+        <div>
+          <label className="text-[10px] font-bold text-[#3D2B1F]/40 uppercase tracking-wider mb-2 block">
+            Tamaño
+          </label>
+          <div className="flex gap-2">
+            {product.precio_m !== null && (
+              <button
+                onClick={() => setSize("M")}
+                className={`flex-1 py-3 rounded-2xl text-sm font-extrabold transition-all border-2 ${
+                  size === "M"
+                    ? "bg-[#F4A261] text-white border-[#F4A261] shadow-md shadow-[#F4A261]/20"
+                    : "bg-white text-[#3D2B1F]/60 border-[#C8956C]/15 hover:border-[#F4A261]/40"
+                }`}
+              >
+                Mediano · ${product.precio_m}
+              </button>
+            )}
+            {product.precio_g !== null && (
+              <button
+                onClick={() => setSize("G")}
+                className={`flex-1 py-3 rounded-2xl text-sm font-extrabold transition-all border-2 ${
+                  size === "G"
+                    ? "bg-[#F4A261] text-white border-[#F4A261] shadow-md shadow-[#F4A261]/20"
+                    : "bg-white text-[#3D2B1F]/60 border-[#C8956C]/15 hover:border-[#F4A261]/40"
+                }`}
+              >
+                Grande · ${product.precio_g}
+              </button>
+            )}
+          </div>
         </div>
       )}
 
       {/* Sabor selector */}
       {hasSabores && (
-        <div className="flex flex-wrap gap-1.5">
-          {product.sabores.map((s) => (
-            <button
-              key={s}
-              onClick={() => setSabor(s)}
-              className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
-                sabor === s
-                  ? "bg-[#F4A261] text-white"
-                  : "bg-white/60 text-[#3D2B1F]/70"
-              }`}
-            >
-              {s}
-            </button>
-          ))}
+        <div>
+          <label className="text-[10px] font-bold text-[#3D2B1F]/40 uppercase tracking-wider mb-2 block">
+            Sabor
+          </label>
+          <div className="flex flex-wrap gap-2">
+            {product.sabores.map((s) => (
+              <button
+                key={s}
+                onClick={() => setSabor(s)}
+                className={`px-4 py-2 rounded-full text-xs font-bold transition-all border-2 ${
+                  sabor === s
+                    ? "bg-[#3D2B1F] text-white border-[#3D2B1F]"
+                    : "bg-white text-[#3D2B1F]/60 border-[#C8956C]/15 hover:border-[#3D2B1F]/30"
+                }`}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
       {/* Extras */}
       {extras.length > 0 && (
-        <div className="flex flex-wrap gap-1.5">
-          {extras.map((extra) => (
-            <button
-              key={extra.id}
-              onClick={() => toggleExtra(extra.name)}
-              className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all ${
-                selectedExtras.includes(extra.name)
-                  ? "bg-[#3D2B1F] text-white"
-                  : "bg-white/60 text-[#3D2B1F]/60"
-              }`}
-            >
-              +{extra.name} ${extra.price}
-            </button>
-          ))}
+        <div>
+          <label className="text-[10px] font-bold text-[#3D2B1F]/40 uppercase tracking-wider mb-2 block">
+            Extras
+          </label>
+          <div className="flex flex-wrap gap-2">
+            {extras.map((extra) => (
+              <button
+                key={extra.id}
+                onClick={() => toggleExtra(extra.name)}
+                className={`px-3 py-1.5 rounded-full text-[11px] font-bold transition-all border ${
+                  selectedExtras.includes(extra.name)
+                    ? "bg-[#3D2B1F] text-white border-[#3D2B1F]"
+                    : "bg-[#FFF8F0] text-[#3D2B1F]/50 border-[#C8956C]/15 hover:border-[#C8956C]/30"
+                }`}
+              >
+                + {extra.name} <span className="opacity-60">${extra.price}</span>
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
       {/* Add button */}
       <button
         onClick={handleAdd}
-        className="w-full py-2.5 rounded-xl bg-[#F4A261] text-white font-bold text-sm hover:bg-[#e8914f] active:scale-95 transition-all"
+        disabled={showConfirm}
+        className={`w-full py-4 rounded-2xl font-extrabold text-sm transition-all active:scale-[0.97] ${
+          showConfirm
+            ? "bg-green-500 text-white"
+            : "bg-[#F4A261] text-white hover:bg-[#e8914f] shadow-lg shadow-[#F4A261]/25"
+        }`}
       >
-        {showConfirm ? "✓ Agregado!" : `Agregar — $${getPrice()}`}
+        {showConfirm ? "✓ Agregado al pedido!" : `Agregar — $${getPrice()}`}
       </button>
     </div>
   )
