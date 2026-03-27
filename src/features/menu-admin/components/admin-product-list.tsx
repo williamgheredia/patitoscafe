@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import type { Product, Category } from "@/features/menu-public/types/menu"
 import { ProductForm } from "./product-form"
 import { deleteProduct } from "../services/menu-actions"
@@ -29,7 +30,7 @@ function ProductRow({
       {/* Thumbnail */}
       <div className="w-11 h-11 rounded-xl overflow-hidden flex-shrink-0 bg-[#FFF8F0]">
         {product.image_url ? (
-          <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+          <Image src={product.image_url} alt={product.name} width={44} height={44} className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
             <svg className="w-5 h-5 text-[#C8956C]/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -125,7 +126,7 @@ function CategorySection({
       {/* Category image */}
       {catImgPreview && (
         <div className="h-24 overflow-hidden">
-          <img src={catImgPreview} alt={category.name} className="w-full h-full object-cover" />
+          <Image src={catImgPreview} alt={category.name} width={400} height={96} className="w-full h-full object-cover" />
         </div>
       )}
 

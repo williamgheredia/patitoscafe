@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 import type { Product, Extra } from "../types/menu"
 import { AddToOrder } from "@/features/whatsapp-order/components/add-to-order"
 import { trackProductView } from "@/features/analytics/services/track-view"
@@ -140,7 +141,7 @@ export function ProductCard({
             <div className="flex items-start gap-4 mb-5">
               {product.image_url ? (
                 <div className="w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 shadow-sm">
-                  <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+                  <Image src={product.image_url} alt={product.name} width={80} height={80} className="w-full h-full object-cover" />
                 </div>
               ) : (
                 <div

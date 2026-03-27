@@ -1,5 +1,6 @@
 "use server"
 
+import sharp from "sharp"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { getStaffSession } from "@/features/loyalty/services/pin-actions"
 import { revalidatePath } from "next/cache"
@@ -66,17 +67,24 @@ async function callGeminiImage(
 async function uploadImage(
   path: string,
   buffer: Buffer,
-  mimeType: string
+  _mimeType: string
 ): Promise<{ publicUrl: string }> {
+  // Convert to WebP with sharp for 80-95% size reduction
+  const webpBuffer = await sharp(buffer)
+    .webp({ quality: 82 })
+    .toBuffer()
+
+  // Force .webp extension
+  const webpPath = path.replace(/\.(png|jpg|jpeg)$/i, ".webp")
   const supabase = createAdminClient()
 
   const { error } = await supabase.storage
     .from("product-images")
-    .upload(path, buffer, { contentType: mimeType, upsert: true })
+    .upload(webpPath, webpBuffer, { contentType: "image/webp", upsert: true })
 
   if (error) throw new Error(`Upload error: ${error.message}`)
 
-  const { data } = supabase.storage.from("product-images").getPublicUrl(path)
+  const { data } = supabase.storage.from("product-images").getPublicUrl(webpPath)
   return { publicUrl: data.publicUrl }
 }
 

@@ -1,5 +1,6 @@
 "use server"
 
+import sharp from "sharp"
 import { revalidatePath } from "next/cache"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { getStaffSession } from "@/features/loyalty/services/pin-actions"
@@ -134,12 +135,17 @@ export async function uploadProductImage(productId: string, formData: FormData) 
   const file = formData.get("image") as File
   if (!file || file.size === 0) return
 
-  const ext = file.name.split(".").pop()
-  const path = `${productId}.${ext}`
+  // Convert to WebP with sharp
+  const arrayBuffer = await file.arrayBuffer()
+  const webpBuffer = await sharp(Buffer.from(arrayBuffer))
+    .webp({ quality: 82 })
+    .toBuffer()
+
+  const path = `${productId}-${Date.now()}.webp`
 
   const { error: uploadError } = await supabase.storage
     .from("product-images")
-    .upload(path, file, { upsert: true })
+    .upload(path, webpBuffer, { contentType: "image/webp", upsert: true })
 
   if (uploadError) throw uploadError
 

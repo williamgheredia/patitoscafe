@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import type { Category } from "../types/menu"
 
 export function CategoryGrid({ categories }: { categories: Category[] }) {
@@ -38,9 +39,11 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
               {cat.image_url ? (
                 <>
                   <div className="w-full aspect-square overflow-hidden">
-                    <img
+                    <Image
                       src={cat.image_url}
                       alt={cat.name}
+                      width={200}
+                      height={200}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
