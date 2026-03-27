@@ -3,7 +3,7 @@
 import { useState, useRef } from "react"
 import type { Category, Product } from "@/features/menu-public/types/menu"
 import { createProduct, updateProduct, uploadProductImage } from "../services/menu-actions"
-import { generateProductImage } from "../services/image-generation"
+import { generateProductImage, optimizeProductImage } from "../services/image-generation"
 import { generateProductDescription } from "../services/description-generation"
 
 export function ProductForm({
@@ -19,18 +19,51 @@ export function ProductForm({
 }) {
   const [loading, setLoading] = useState(false)
   const [generating, setGenerating] = useState(false)
+  const [optimizing, setOptimizing] = useState(false)
   const [genError, setGenError] = useState("")
   const [genDesc, setGenDesc] = useState(false)
   const [descValue, setDescValue] = useState(product?.description ?? "")
+  const [customPrompt, setCustomPrompt] = useState("")
   const [imagePreview, setImagePreview] = useState<string | null>(product?.image_url ?? null)
   const [imageFile, setImageFile] = useState<File | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
+  const optimizeFileRef = useRef<HTMLInputElement>(null)
 
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
     setImageFile(file)
     setImagePreview(URL.createObjectURL(file))
+  }
+
+  async function handleOptimizePhoto(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file || !product) return
+
+    setOptimizing(true)
+    setGenError("")
+
+    try {
+      // Convert file to base64 data URI
+      const arrayBuffer = await file.arrayBuffer()
+      const base64 = Buffer.from(arrayBuffer).toString("base64")
+      const mimeType = file.type || "image/jpeg"
+      const dataUri = `data:${mimeType};base64,${base64}`
+
+      const result = await optimizeProductImage(product.id, dataUri)
+      if (result.success && result.imageUrl) {
+        setImagePreview(result.imageUrl)
+        setImageFile(null)
+      } else {
+        setGenError(result.error ?? "Error optimizando")
+      }
+    } catch {
+      setGenError("Error al procesar la imagen")
+    }
+
+    setOptimizing(false)
+    // Reset input so same file can be re-selected
+    if (optimizeFileRef.current) optimizeFileRef.current.value = ""
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -48,7 +81,7 @@ export function ProductForm({
         productId = await createProduct(formData)
       }
 
-      // Upload image if selected
+      // Upload image if selected manually
       if (imageFile && productId) {
         const imgData = new FormData()
         imgData.set("image", imageFile)
@@ -72,11 +105,13 @@ export function ProductForm({
       </div>
 
       <div className="p-5 space-y-4">
-        {/* Image upload */}
+        {/* Image section */}
         <div>
           <label className="block text-xs font-bold text-[#3D2B1F]/60 uppercase tracking-wider mb-2">
             Foto del producto
           </label>
+
+          {/* Image preview / upload */}
           <div
             onClick={() => fileRef.current?.click()}
             className="relative group cursor-pointer rounded-xl border-2 border-dashed border-[#C8956C]/30 hover:border-[#F4A261] transition-colors overflow-hidden"
@@ -102,7 +137,7 @@ export function ProductForm({
                   </svg>
                 </div>
                 <span className="text-xs font-medium text-[#3D2B1F]/40">
-                  Toca para agregar foto
+                  Toca para subir foto
                 </span>
               </div>
             )}
@@ -115,36 +150,87 @@ export function ProductForm({
             />
           </div>
 
-          {/* AI Generate button — only for existing products */}
+          {/* AI buttons — only for existing products */}
           {product && (
-            <button
-              type="button"
-              disabled={generating}
-              onClick={async () => {
-                setGenerating(true)
-                setGenError("")
-                const catName = categories.find(c => c.id === product.category_id)?.name ?? "Café"
-                const result = await generateProductImage(product.id, product.name, catName)
-                if (result.success && result.imageUrl) {
-                  setImagePreview(result.imageUrl)
-                  setImageFile(null)
-                } else {
-                  setGenError(result.error ?? "Error")
-                }
-                setGenerating(false)
-              }}
-              className="w-full mt-2 py-2 rounded-xl text-xs font-bold border border-purple-200 text-purple-500 hover:bg-purple-50 disabled:opacity-40 transition-colors flex items-center justify-center gap-1.5"
-            >
-              {generating ? (
-                <>
-                  <span className="animate-spin inline-block w-3 h-3 border-2 border-purple-300 border-t-purple-600 rounded-full" />
-                  Generando imagen...
-                </>
-              ) : (
-                <>✨ Generar foto con IA</>
-              )}
-            </button>
+            <div className="flex gap-2 mt-2">
+              {/* Optimize real photo */}
+              <button
+                type="button"
+                disabled={optimizing || generating}
+                onClick={() => optimizeFileRef.current?.click()}
+                className="flex-1 py-2 rounded-xl text-xs font-bold border border-green-200 text-green-600 hover:bg-green-50 disabled:opacity-40 transition-colors flex items-center justify-center gap-1.5"
+              >
+                {optimizing ? (
+                  <>
+                    <span className="animate-spin inline-block w-3 h-3 border-2 border-green-300 border-t-green-600 rounded-full" />
+                    Optimizando...
+                  </>
+                ) : (
+                  <>📸 Foto real → IA mejora</>
+                )}
+              </button>
+              <input
+                ref={optimizeFileRef}
+                type="file"
+                accept="image/*"
+                onChange={handleOptimizePhoto}
+                className="hidden"
+              />
+
+              {/* Generate from scratch */}
+              <button
+                type="button"
+                disabled={generating || optimizing}
+                onClick={async () => {
+                  setGenerating(true)
+                  setGenError("")
+                  const catName = categories.find(c => c.id === product.category_id)?.name ?? "Café"
+                  const result = await generateProductImage(
+                    product.id,
+                    product.name,
+                    catName,
+                    customPrompt || undefined
+                  )
+                  if (result.success && result.imageUrl) {
+                    setImagePreview(result.imageUrl)
+                    setImageFile(null)
+                  } else {
+                    setGenError(result.error ?? "Error")
+                  }
+                  setGenerating(false)
+                }}
+                className="flex-1 py-2 rounded-xl text-xs font-bold border border-purple-200 text-purple-500 hover:bg-purple-50 disabled:opacity-40 transition-colors flex items-center justify-center gap-1.5"
+              >
+                {generating ? (
+                  <>
+                    <span className="animate-spin inline-block w-3 h-3 border-2 border-purple-300 border-t-purple-600 rounded-full" />
+                    Generando...
+                  </>
+                ) : (
+                  <>✨ Generar con IA</>
+                )}
+              </button>
+            </div>
           )}
+
+          {/* Custom prompt */}
+          {product && (
+            <div className="mt-2">
+              <textarea
+                value={customPrompt}
+                onChange={(e) => setCustomPrompt(e.target.value)}
+                placeholder='Prompt personalizado (opcional). Ej: "Un frappe morado con crema batida en vaso alto transparente"'
+                rows={2}
+                className="w-full p-2.5 rounded-xl border border-purple-200/60 text-xs bg-purple-50/30 font-medium text-[#3D2B1F] placeholder:text-[#3D2B1F]/25 focus:outline-none focus:ring-2 focus:ring-purple-300/40 focus:border-purple-300 resize-none"
+              />
+              {customPrompt.trim() && (
+                <p className="text-[10px] text-purple-400 mt-0.5 font-medium">
+                  ✨ &quot;Generar con IA&quot; usará este prompt
+                </p>
+              )}
+            </div>
+          )}
+
           {genError && (
             <p className="text-xs text-red-500 mt-1 text-center">{genError}</p>
           )}

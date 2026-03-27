@@ -13,12 +13,29 @@ async function requireStaff() {
 
 const STARBUCKS_STYLE = `Starbucks-style professional product photography. Clean, premium, aspirational. Soft diffused studio lighting, seamless gradient background in warm cream to white tones. The drink is the hero — perfectly styled, condensation droplets visible, garnished elegantly. Shallow depth of field, shot on 85mm lens. Color grading: warm highlights, soft shadows, slightly desaturated greens. No text, no logos, no watermarks. Mood: premium café, Instagram-worthy, clean and polished like a Starbucks menu board.`
 
+type GeminiMessage = { role: string; content: string | Array<{ type: string; text?: string; image_url?: { url: string } }> }
+
 async function callGeminiImage(
   prompt: string,
-  aspectRatio: string
+  aspectRatio: string,
+  inputImageBase64?: string
 ): Promise<{ success: boolean; error?: string; buffer?: Buffer; mimeType?: string }> {
   const apiKey = process.env.OPENROUTER_API_KEY
   if (!apiKey) return { success: false, error: "OPENROUTER_API_KEY no configurada" }
+
+  // Build message — multimodal if input image provided
+  let messages: GeminiMessage[]
+  if (inputImageBase64) {
+    messages = [{
+      role: "user",
+      content: [
+        { type: "text", text: prompt },
+        { type: "image_url", image_url: { url: inputImageBase64 } },
+      ],
+    }]
+  } else {
+    messages = [{ role: "user", content: prompt }]
+  }
 
   const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
@@ -30,7 +47,7 @@ async function callGeminiImage(
     },
     body: JSON.stringify({
       model: "google/gemini-2.5-flash-image",
-      messages: [{ role: "user", content: prompt }],
+      messages,
       image_config: { aspect_ratio: aspectRatio },
     }),
   })
@@ -93,44 +110,50 @@ async function uploadImage(
 export async function generateProductImage(
   productId: string,
   productName: string,
-  categoryName: string
+  categoryName: string,
+  customPrompt?: string
 ): Promise<{ success: boolean; error?: string; imageUrl?: string }> {
   await requireStaff()
 
   try {
-    // Step 1: Use text model to reason about what this drink looks like
-    const apiKey = process.env.OPENROUTER_API_KEY!
-    const descResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.0-flash-001",
-        messages: [
-          {
-            role: "system",
-            content: "You are a barista and food photographer. Given a drink name and category, describe EXACTLY what this drink looks like physically: the type of cup/glass, the color of the liquid, the texture (foamy, icy, clear, layered), toppings, garnishes, size, and how it's typically presented. Be very specific and visual. Answer in English. Max 3 sentences.",
-          },
-          {
-            role: "user",
-            content: `Describe the physical appearance of "${productName}" from the "${categoryName}" category at a café. What does it look like when served?`,
-          },
-        ],
-        max_tokens: 150,
-        temperature: 0.3,
-      }),
-    })
+    let prompt: string
 
-    let drinkDescription = ""
-    if (descResponse.ok) {
-      const descData = await descResponse.json()
-      drinkDescription = descData.choices?.[0]?.message?.content?.trim() ?? ""
-    }
+    if (customPrompt && customPrompt.trim()) {
+      // Custom prompt — user controls the generation, prepend style
+      prompt = `Generate a photo: ${STARBUCKS_STYLE}\n\n${customPrompt.trim()}`
+    } else {
+      // Default two-step flow: text model reasons, then image model generates
+      const apiKey = process.env.OPENROUTER_API_KEY!
+      const descResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-2.0-flash-001",
+          messages: [
+            {
+              role: "system",
+              content: "You are a barista and food photographer. Given a drink name and category, describe EXACTLY what this drink looks like physically: the type of cup/glass, the color of the liquid, the texture (foamy, icy, clear, layered), toppings, garnishes, size, and how it's typically presented. Be very specific and visual. Answer in English. Max 3 sentences.",
+            },
+            {
+              role: "user",
+              content: `Describe the physical appearance of "${productName}" from the "${categoryName}" category at a café. What does it look like when served?`,
+            },
+          ],
+          max_tokens: 150,
+          temperature: 0.3,
+        }),
+      })
 
-    // Step 2: Generate image with the detailed description
-    const prompt = `Generate a photo: ${STARBUCKS_STYLE}
+      let drinkDescription = ""
+      if (descResponse.ok) {
+        const descData = await descResponse.json()
+        drinkDescription = descData.choices?.[0]?.message?.content?.trim() ?? ""
+      }
+
+      prompt = `Generate a photo: ${STARBUCKS_STYLE}
 
 Product: "${productName}" (category: ${categoryName})
 
@@ -138,6 +161,7 @@ Detailed visual description of this specific drink:
 ${drinkDescription || `A "${productName}" as served in a café.`}
 
 Generate EXACTLY this drink. Not a generic drink. This specific one.`
+    }
 
     const result = await callGeminiImage(prompt, "3:4")
     if (!result.success) return result
@@ -163,6 +187,44 @@ Generate EXACTLY this drink. Not a generic drink. This specific one.`
   } catch (err) {
     console.error("Product image error:", err)
     return { success: false, error: "Error generando imagen" }
+  }
+}
+
+// --- Optimize real photo ---
+
+export async function optimizeProductImage(
+  productId: string,
+  imageBase64: string
+): Promise<{ success: boolean; error?: string; imageUrl?: string }> {
+  await requireStaff()
+
+  const prompt = `Enhance this real product photo to look like a Starbucks menu board image. Keep the EXACT same drink, same cup, same contents — do NOT replace or change the beverage. Only improve: lighting (soft, diffused studio light), background (clean, soft cream/white gradient), slight depth of field, color grading (warm highlights, soft shadows). Make it look premium, aspirational, Instagram-worthy. No text, no logos, no watermarks.`
+
+  try {
+    const result = await callGeminiImage(prompt, "3:4", imageBase64)
+    if (!result.success) return result
+
+    const ext = result.mimeType!.includes("png") ? "png" : "jpg"
+    const { publicUrl } = await uploadImage(
+      `${productId}-opt-${Date.now()}.${ext}`,
+      result.buffer!,
+      result.mimeType!
+    )
+
+    const supabase = createAdminClient()
+    const { error } = await supabase
+      .from("products")
+      .update({ image_url: publicUrl })
+      .eq("id", productId)
+
+    if (error) return { success: false, error: `DB error: ${error.message}` }
+
+    revalidatePath("/")
+    revalidatePath("/staff/admin")
+    return { success: true, imageUrl: publicUrl }
+  } catch (err) {
+    console.error("Optimize image error:", err)
+    return { success: false, error: "Error optimizando imagen" }
   }
 }
 
