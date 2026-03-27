@@ -12,10 +12,12 @@ async function requireStaff() {
 }
 
 function initWebPush() {
+  const publicKey = (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? "").trim().replace(/=+$/, "")
+  const privateKey = (process.env.VAPID_PRIVATE_KEY ?? "").trim().replace(/=+$/, "")
   webpush.setVapidDetails(
     "mailto:patitoscafe@example.com",
-    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-    process.env.VAPID_PRIVATE_KEY!
+    publicKey,
+    privateKey
   )
 }
 
