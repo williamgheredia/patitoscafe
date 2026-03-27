@@ -32,20 +32,16 @@ export async function updateAppSetting(key: string, value: string) {
 
   if (error) throw error
   revalidatePath("/")
-  revalidatePath("/staff/admin")
+  revalidatePath("/staff/config")
 }
 
-export async function uploadAppIcon(formData: FormData): Promise<{ url: string }> {
+export async function uploadAppIcon(base64Data: string): Promise<{ url: string }> {
   await requireStaff()
   const supabase = createAdminClient()
 
-  const file = formData.get("icon") as File
-  if (!file || file.size === 0) throw new Error("No file")
+  const buffer = Buffer.from(base64Data, "base64")
 
-  const arrayBuffer = await file.arrayBuffer()
-
-  // Generate 512x512 WebP icon
-  const iconBuffer = await sharp(Buffer.from(arrayBuffer))
+  const iconBuffer = await sharp(buffer)
     .resize(512, 512, { fit: "cover" })
     .webp({ quality: 90 })
     .toBuffer()
@@ -61,25 +57,20 @@ export async function uploadAppIcon(formData: FormData): Promise<{ url: string }
   const { data } = supabase.storage.from("product-images").getPublicUrl(path)
   const url = data.publicUrl
 
-  // Save to settings
   await supabase.from("app_settings").update({ value: url }).eq("key", "icon_url")
 
   revalidatePath("/")
-  revalidatePath("/staff/admin")
+  revalidatePath("/staff/config")
   return { url }
 }
 
-export async function uploadFavicon(formData: FormData): Promise<{ url: string }> {
+export async function uploadFavicon(base64Data: string): Promise<{ url: string }> {
   await requireStaff()
   const supabase = createAdminClient()
 
-  const file = formData.get("favicon") as File
-  if (!file || file.size === 0) throw new Error("No file")
+  const buffer = Buffer.from(base64Data, "base64")
 
-  const arrayBuffer = await file.arrayBuffer()
-
-  // Generate 32x32 PNG favicon
-  const faviconBuffer = await sharp(Buffer.from(arrayBuffer))
+  const faviconBuffer = await sharp(buffer)
     .resize(32, 32, { fit: "cover" })
     .png()
     .toBuffer()
@@ -98,6 +89,6 @@ export async function uploadFavicon(formData: FormData): Promise<{ url: string }
   await supabase.from("app_settings").update({ value: url }).eq("key", "favicon_url")
 
   revalidatePath("/")
-  revalidatePath("/staff/admin")
+  revalidatePath("/staff/config")
   return { url }
 }

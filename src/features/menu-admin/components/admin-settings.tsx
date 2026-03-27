@@ -4,6 +4,19 @@ import { useState, useRef } from "react"
 import Image from "next/image"
 import { uploadAppIcon, uploadFavicon } from "../services/settings-actions"
 
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      const result = reader.result as string
+      // Strip data:image/...;base64, prefix
+      resolve(result.split(",")[1])
+    }
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
+}
+
 export function AdminSettings({
   settings,
 }: {
@@ -13,6 +26,7 @@ export function AdminSettings({
   const [faviconPreview, setFaviconPreview] = useState(settings.favicon_url || "")
   const [uploadingIcon, setUploadingIcon] = useState(false)
   const [uploadingFav, setUploadingFav] = useState(false)
+  const [error, setError] = useState("")
   const iconRef = useRef<HTMLInputElement>(null)
   const favRef = useRef<HTMLInputElement>(null)
 
@@ -20,13 +34,14 @@ export function AdminSettings({
     const file = e.target.files?.[0]
     if (!file) return
     setUploadingIcon(true)
+    setError("")
     try {
-      const fd = new FormData()
-      fd.set("icon", file)
-      const { url } = await uploadAppIcon(fd)
+      const base64 = await fileToBase64(file)
+      const { url } = await uploadAppIcon(base64)
       setIconPreview(url)
     } catch (err) {
       console.error(err)
+      setError("Error al subir ícono")
     }
     setUploadingIcon(false)
     if (iconRef.current) iconRef.current.value = ""
@@ -36,13 +51,14 @@ export function AdminSettings({
     const file = e.target.files?.[0]
     if (!file) return
     setUploadingFav(true)
+    setError("")
     try {
-      const fd = new FormData()
-      fd.set("favicon", file)
-      const { url } = await uploadFavicon(fd)
+      const base64 = await fileToBase64(file)
+      const { url } = await uploadFavicon(base64)
       setFaviconPreview(url)
     } catch (err) {
       console.error(err)
+      setError("Error al subir favicon")
     }
     setUploadingFav(false)
     if (favRef.current) favRef.current.value = ""
@@ -50,19 +66,28 @@ export function AdminSettings({
 
   return (
     <div className="space-y-6">
+      {error && (
+        <div className="bg-red-50 text-red-500 text-sm font-bold rounded-xl p-3 text-center">
+          {error}
+        </div>
+      )}
+
       <div className="bg-white rounded-2xl p-5 border border-[#C8956C]/10">
         <h3 className="font-extrabold text-[#3D2B1F] text-base mb-4">Ícono de la App (PWA)</h3>
         <p className="text-sm text-[#3D2B1F]/50 mb-4">
-          Este ícono aparece cuando un cliente instala la app en su celular. Se recomienda una imagen cuadrada de al menos 512×512px.
+          Este ícono aparece cuando un cliente instala la app en su celular. Se recomienda una imagen cuadrada de al menos 512x512px.
         </p>
 
         <div className="flex items-center gap-5">
-          {/* Preview */}
           <div
-            onClick={() => iconRef.current?.click()}
+            onClick={() => !uploadingIcon && iconRef.current?.click()}
             className="w-24 h-24 rounded-2xl overflow-hidden border-2 border-dashed border-[#C8956C]/30 hover:border-[#F4A261] cursor-pointer transition-colors flex-shrink-0 bg-[#FFF8F0]"
           >
-            {iconPreview ? (
+            {uploadingIcon ? (
+              <div className="w-full h-full flex items-center justify-center">
+                <span className="animate-spin inline-block w-6 h-6 border-2 border-[#F4A261]/30 border-t-[#F4A261] rounded-full" />
+              </div>
+            ) : iconPreview ? (
               <Image src={iconPreview} alt="App icon" width={96} height={96} className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
@@ -88,8 +113,8 @@ export function AdminSettings({
               className="hidden"
             />
             {iconPreview && (
-              <p className="text-[10px] text-green-500 mt-1.5 font-medium text-center">
-                ✓ Ícono personalizado activo
+              <p className="text-xs text-green-500 mt-1.5 font-medium text-center">
+                Ícono personalizado activo
               </p>
             )}
           </div>
@@ -103,12 +128,15 @@ export function AdminSettings({
         </p>
 
         <div className="flex items-center gap-5">
-          {/* Preview */}
           <div
-            onClick={() => favRef.current?.click()}
+            onClick={() => !uploadingFav && favRef.current?.click()}
             className="w-16 h-16 rounded-xl overflow-hidden border-2 border-dashed border-[#C8956C]/30 hover:border-[#F4A261] cursor-pointer transition-colors flex-shrink-0 bg-[#FFF8F0]"
           >
-            {faviconPreview ? (
+            {uploadingFav ? (
+              <div className="w-full h-full flex items-center justify-center">
+                <span className="animate-spin inline-block w-5 h-5 border-2 border-[#C8956C]/30 border-t-[#C8956C] rounded-full" />
+              </div>
+            ) : faviconPreview ? (
               <Image src={faviconPreview} alt="Favicon" width={64} height={64} className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
@@ -134,8 +162,8 @@ export function AdminSettings({
               className="hidden"
             />
             {faviconPreview && (
-              <p className="text-[10px] text-green-500 mt-1.5 font-medium text-center">
-                ✓ Favicon personalizado activo
+              <p className="text-xs text-green-500 mt-1.5 font-medium text-center">
+                Favicon personalizado activo
               </p>
             )}
           </div>
