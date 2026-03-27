@@ -2,20 +2,6 @@
 
 import { useState, useRef } from "react"
 import Image from "next/image"
-import { uploadAppIcon, uploadFavicon } from "../services/settings-actions"
-
-function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => {
-      const result = reader.result as string
-      // Strip data:image/...;base64, prefix
-      resolve(result.split(",")[1])
-    }
-    reader.onerror = reject
-    reader.readAsDataURL(file)
-  })
-}
 
 export function AdminSettings({
   settings,
@@ -30,18 +16,34 @@ export function AdminSettings({
   const iconRef = useRef<HTMLInputElement>(null)
   const favRef = useRef<HTMLInputElement>(null)
 
+  async function handleUpload(file: File, type: "icon" | "favicon") {
+    const fd = new FormData()
+    fd.set("file", file)
+    fd.set("type", type)
+
+    const res = await fetch("/api/settings/upload-icon", {
+      method: "POST",
+      body: fd,
+    })
+
+    if (!res.ok) {
+      const data = await res.json()
+      throw new Error(data.error || "Upload failed")
+    }
+
+    return (await res.json()) as { url: string }
+  }
+
   async function handleIconUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
     setUploadingIcon(true)
     setError("")
     try {
-      const base64 = await fileToBase64(file)
-      const { url } = await uploadAppIcon(base64)
+      const { url } = await handleUpload(file, "icon")
       setIconPreview(url)
     } catch (err) {
-      console.error(err)
-      setError("Error al subir ícono")
+      setError(err instanceof Error ? err.message : "Error al subir ícono")
     }
     setUploadingIcon(false)
     if (iconRef.current) iconRef.current.value = ""
@@ -53,12 +55,10 @@ export function AdminSettings({
     setUploadingFav(true)
     setError("")
     try {
-      const base64 = await fileToBase64(file)
-      const { url } = await uploadFavicon(base64)
+      const { url } = await handleUpload(file, "favicon")
       setFaviconPreview(url)
     } catch (err) {
-      console.error(err)
-      setError("Error al subir favicon")
+      setError(err instanceof Error ? err.message : "Error al subir favicon")
     }
     setUploadingFav(false)
     if (favRef.current) favRef.current.value = ""
