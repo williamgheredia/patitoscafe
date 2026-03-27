@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import type { Category } from "../types/menu"
+import { SubscribeButton } from "./subscribe-button"
 
 export function CategoryGrid({ categories }: { categories: Category[] }) {
   return (
@@ -24,6 +25,8 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
             </svg>
             Ver Ubicación
           </a>
+          <span className="mx-2 text-[#C8956C]/30">·</span>
+          <SubscribeButton />
           <h2 className="font-[family-name:var(--font-display)] text-3xl font-black text-[#3D2B1F] tracking-tight italic leading-tight">
             ¿Qué se te antoja?
           </h2>
