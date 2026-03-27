@@ -29,7 +29,7 @@ export default async function StaffAdminPage() {
   return (
     <div className="min-h-screen bg-[#FFF8F0]">
       <StaffHeader employeeName={session.employeeName} />
-      <div className="max-w-lg mx-auto px-4 py-4">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
         <AdminProductList
           products={products}
           categories={categories}

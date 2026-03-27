@@ -8,8 +8,8 @@ export function StaffHeader({ employeeName }: { employeeName: string }) {
   const router = useRouter()
 
   return (
-    <header className="sticky top-0 z-10 bg-[#3D2B1F] text-white px-4 py-3">
-      <div className="max-w-lg mx-auto">
+    <header className="sticky top-0 z-10 bg-[#3D2B1F] text-white px-4 sm:px-6 py-3">
+      <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-xl">🐥</span>
