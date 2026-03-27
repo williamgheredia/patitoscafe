@@ -36,6 +36,9 @@ export function StaffHeader({ employeeName }: { employeeName: string }) {
           <Link href="/staff/sellos" className="text-white/60 hover:text-white">
             Sellos
           </Link>
+          <Link href="/staff/config" className="text-white/60 hover:text-white">
+            Config
+          </Link>
         </nav>
       </div>
     </header>

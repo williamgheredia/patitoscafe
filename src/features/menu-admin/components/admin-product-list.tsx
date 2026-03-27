@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import Image from "next/image"
 import type { Product, Category } from "@/features/menu-public/types/menu"
 import { ProductForm } from "./product-form"
-import { AdminSettings } from "./admin-settings"
 import { deleteProduct, createCategory, toggleProductAvailability } from "../services/menu-actions"
 import { generateProductImage, generateCategoryImage } from "../services/image-generation"
 
@@ -393,16 +392,13 @@ export function AdminProductList({
   products,
   categories,
   topProducts,
-  appSettings,
 }: {
   products: Product[]
   categories: Category[]
   topProducts: TopProduct[]
-  appSettings: Record<string, string>
 }) {
   const [activeCatId, setActiveCatId] = useState<string | null>(categories[0]?.id ?? null)
   const [showStats, setShowStats] = useState(false)
-  const [showSettings, setShowSettings] = useState(false)
   const [showNewCat, setShowNewCat] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const router = useRouter()
@@ -447,7 +443,7 @@ export function AdminProductList({
           })}
 
           <button
-            onClick={() => { setShowStats(true); setShowSettings(false); setShowNewCat(false); setEditingId(null) }}
+            onClick={() => { setShowStats(true); setShowNewCat(false); setEditingId(null) }}
             className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all ${
               showStats ? "bg-[#3D2B1F] text-white" : "bg-white text-[#3D2B1F]/50 border border-[#C8956C]/15"
             }`}
@@ -456,16 +452,7 @@ export function AdminProductList({
           </button>
 
           <button
-            onClick={() => { setShowSettings(true); setShowStats(false); setShowNewCat(false); setEditingId(null) }}
-            className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all ${
-              showSettings ? "bg-[#3D2B1F] text-white" : "bg-white text-[#3D2B1F]/50 border border-[#C8956C]/15"
-            }`}
-          >
-            ⚙️ Config
-          </button>
-
-          <button
-            onClick={() => { setShowNewCat(true); setShowStats(false); setShowSettings(false) }}
+            onClick={() => { setShowNewCat(true); setShowStats(false) }}
             className="px-3.5 py-2 rounded-full text-xs font-bold text-[#F4A261] border border-dashed border-[#F4A261]/40 hover:bg-[#F4A261]/5 transition-all"
           >
             ＋
@@ -481,9 +468,7 @@ export function AdminProductList({
       )}
 
       {/* Content */}
-      {showSettings ? (
-        <AdminSettings settings={appSettings} />
-      ) : showStats ? (
+      {showStats ? (
         <StatsView products={topProducts} />
       ) : (
         <>

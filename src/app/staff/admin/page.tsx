@@ -3,7 +3,6 @@ import { PinLogin } from "@/features/loyalty/components/pin-login"
 import { AdminProductList } from "@/features/menu-admin/components/admin-product-list"
 import { getCategories } from "@/features/menu-public/services/menu-queries"
 import { getTopProducts } from "@/features/analytics/services/analytics-queries"
-import { getAppSettings } from "@/features/menu-admin/services/settings-actions"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { StaffHeader } from "./staff-header"
 
@@ -21,11 +20,10 @@ export default async function StaffAdminPage() {
   const session = await getStaffSession()
   if (!session) return <PinLogin />
 
-  const [products, categories, topProducts, appSettings] = await Promise.all([
+  const [products, categories, topProducts] = await Promise.all([
     getAllProducts(),
     getCategories(),
     getTopProducts(),
-    getAppSettings(),
   ])
 
   return (
@@ -36,7 +34,6 @@ export default async function StaffAdminPage() {
           products={products}
           categories={categories}
           topProducts={topProducts}
-          appSettings={appSettings}
         />
       </div>
     </div>
