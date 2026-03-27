@@ -4,6 +4,7 @@ import { useState, useRef } from "react"
 import type { Category, Product } from "@/features/menu-public/types/menu"
 import { createProduct, updateProduct, uploadProductImage } from "../services/menu-actions"
 import { generateProductImage } from "../services/image-generation"
+import { generateProductDescription } from "../services/description-generation"
 
 export function ProductForm({
   categories,
@@ -19,6 +20,8 @@ export function ProductForm({
   const [loading, setLoading] = useState(false)
   const [generating, setGenerating] = useState(false)
   const [genError, setGenError] = useState("")
+  const [genDesc, setGenDesc] = useState(false)
+  const [descValue, setDescValue] = useState(product?.description ?? "")
   const [imagePreview, setImagePreview] = useState<string | null>(product?.image_url ?? null)
   const [imageFile, setImageFile] = useState<File | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
@@ -235,6 +238,56 @@ export function ProductForm({
             placeholder="Mango, Fresa, Taro (separados por coma)"
             className="w-full p-3 rounded-xl border border-[#C8956C]/20 text-sm bg-[#FFF8F0] font-medium text-[#3D2B1F] placeholder:text-[#3D2B1F]/25 focus:outline-none focus:ring-2 focus:ring-[#F4A261]/40 focus:border-[#F4A261]"
           />
+        </div>
+
+        {/* Description */}
+        <div>
+          <label className="block text-xs font-bold text-[#3D2B1F]/60 uppercase tracking-wider mb-1.5">
+            Descripción
+          </label>
+          <div className="relative">
+            <textarea
+              name="description"
+              value={descValue}
+              onChange={(e) => setDescValue(e.target.value)}
+              placeholder="Descripción breve del producto"
+              rows={2}
+              className="w-full p-3 rounded-xl border border-[#C8956C]/20 text-sm bg-[#FFF8F0] font-medium text-[#3D2B1F] placeholder:text-[#3D2B1F]/25 focus:outline-none focus:ring-2 focus:ring-[#F4A261]/40 focus:border-[#F4A261] resize-none"
+            />
+          </div>
+          {product && (
+            <button
+              type="button"
+              disabled={genDesc}
+              onClick={async () => {
+                setGenDesc(true)
+                const form = document.querySelector("form")
+                const nameInput = form?.querySelector<HTMLInputElement>("[name='name']")
+                const saboresInput = form?.querySelector<HTMLInputElement>("[name='sabores']")
+                const catSelect = form?.querySelector<HTMLSelectElement>("[name='category_id']")
+                const catName = catSelect?.selectedOptions?.[0]?.textContent?.trim() ?? "Café"
+                const name = nameInput?.value ?? product.name
+                const saboresStr = saboresInput?.value ?? ""
+                const sabores = saboresStr ? saboresStr.split(",").map(s => s.trim()).filter(Boolean) : []
+
+                const result = await generateProductDescription(product.id, name, catName, sabores)
+                if (result.success && result.description) {
+                  setDescValue(result.description)
+                }
+                setGenDesc(false)
+              }}
+              className="mt-1.5 w-full py-1.5 rounded-xl text-xs font-bold border border-blue-200 text-blue-500 hover:bg-blue-50 disabled:opacity-40 transition-colors flex items-center justify-center gap-1.5"
+            >
+              {genDesc ? (
+                <>
+                  <span className="animate-spin inline-block w-3 h-3 border-2 border-blue-300 border-t-blue-600 rounded-full" />
+                  Generando...
+                </>
+              ) : (
+                <>✍️ Generar descripción con IA</>
+              )}
+            </button>
+          )}
         </div>
 
         {/* Actions */}
