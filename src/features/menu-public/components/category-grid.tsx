@@ -8,7 +8,7 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
         {/* Hero */}
         <div className="text-center mb-8 animate-fade-up">
           <div className="inline-flex items-center gap-1.5 bg-[#F4A261]/10 text-[#F4A261] text-xs font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-wider">
-            <span>☀️</span> Cancún, MX
+            <span>📍</span> Frente a Urgencias IMSS 510
           </div>
           <h2 className="font-[family-name:var(--font-display)] text-3xl font-black text-[#3D2B1F] tracking-tight italic leading-tight">
             ¿Qué se te antoja?

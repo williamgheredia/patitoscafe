@@ -6,10 +6,10 @@ export function MenuHeader() {
           <span className="text-2xl group-hover:animate-float transition-transform">🐥</span>
           <div className="leading-none">
             <h1 className="font-[family-name:var(--font-display)] text-xl font-black text-[#3D2B1F] tracking-tight italic">
-              Patitos
+              Patitos Café
             </h1>
             <p className="text-[10px] font-bold text-[#C8956C] uppercase tracking-[0.15em] mt-0.5">
-              Café & Drinks
+              & Drinks
             </p>
           </div>
         </a>
