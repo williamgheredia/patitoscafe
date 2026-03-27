@@ -11,6 +11,7 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
           <div className="inline-flex items-center gap-1.5 bg-[#F4A261]/10 text-[#F4A261] text-sm font-bold px-4 py-1.5 rounded-full mb-2 uppercase tracking-wider">
             <span>📍</span> Frente a Urgencias IMSS 510
           </div>
+          <br />
           <a
             href="https://share.google/lYCxpbkee1pkYN0QL"
             target="_blank"
