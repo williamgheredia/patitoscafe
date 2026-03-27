@@ -32,7 +32,7 @@ export async function verifyPin(pin: string): Promise<{ success: boolean; error?
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: COOKIE_MAX_AGE,
-    path: "/staff",
+    path: "/",
   })
 
   return { success: true }
@@ -54,7 +54,7 @@ export async function logoutStaff(): Promise<void> {
   const cookieStore = await cookies()
   cookieStore.set(COOKIE_NAME, "", {
     httpOnly: true,
-    path: "/staff",
+    path: "/",
     maxAge: 0,
   })
 }
