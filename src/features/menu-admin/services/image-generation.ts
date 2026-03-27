@@ -91,22 +91,12 @@ export async function generateProductImage(
 
   const prompt = `Generate a photo: ${STARBUCKS_STYLE}
 
-IMPORTANT: The drink is EXACTLY a "${productName}". This is the SPECIFIC drink you must show — not a generic café drink.
+You are generating a product image for a café menu. Use your knowledge of beverages to create an accurate photo.
 
-Rules for "${productName}":
-- If the name contains "Espresso": show a small ceramic espresso cup with dark concentrated coffee, crema on top. NOT a frappe, NOT a large drink.
-- If the name contains "Americano": show a clear glass or ceramic mug with black coffee, slightly transparent. NOT a latte.
-- If the name contains "Capuccino" or "Latte": show a ceramic cup with steamed milk and latte art on top.
-- If the name contains "Moka": show a coffee drink with visible chocolate swirls.
-- If the name contains "Frappe": show a tall clear plastic cup with blended icy drink, whipped cream on top, straw.
-- If the name contains "Smoothie" or "Licuado": show a tall glass with vibrant blended fruit, bright colors.
-- If the name contains "Té" or "Tea" or "Chai": show a clear glass cup with tea, you can see through the liquid.
-- If the name contains "Soda": show a tall glass with sparkling colored drink, ice, bubbles visible.
-- If the name contains "Matcha": show vibrant green colored drink.
-- If the name contains "Taro": show purple/lavender colored drink.
-- Otherwise: show a beautiful "${productName}" drink in the style of category "${categoryName}".
+Category: "${categoryName}"
+Product name: "${productName}"
 
-The drink must be RECOGNIZABLE as "${productName}". Do not substitute with a different drink type.`
+CRITICAL: You must understand what "${productName}" actually IS as a real-world drink in the context of the "${categoryName}" category at a café. Show the drink in its correct form — the right glass/cup type, the right color, the right texture, the right size, the right presentation. If you don't know what it looks like, think about what a barista would serve when a customer orders exactly "${productName}" from the "${categoryName}" section. Do NOT default to a generic frappe or iced drink. Each product is different and must look like itself.`
 
   try {
     const result = await callGeminiImage(prompt, "3:4")
