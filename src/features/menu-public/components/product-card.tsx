@@ -58,7 +58,7 @@ export function ProductCard({
         }}
       >
         {!product.is_available && (
-          <div className="absolute top-3 right-3 z-10 bg-[#3D2B1F] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full tracking-wide uppercase">
+          <div className="absolute top-3 right-3 z-10 bg-[#3D2B1F] text-white text-xs font-extrabold px-3 py-1.5 rounded-full tracking-wide uppercase">
             Agotado
           </div>
         )}
@@ -91,26 +91,26 @@ export function ProductCard({
         )}
 
         <div className="p-3.5 bg-white">
-          <h3 className="font-extrabold text-[#3D2B1F] text-[13px] leading-tight tracking-tight">
+          <h3 className="font-extrabold text-[#3D2B1F] text-[15px] leading-tight tracking-tight">
             {product.name}
           </h3>
 
           {product.sabores.length > 0 && (
-            <p className="text-[10px] text-[#C8956C] mt-1 line-clamp-1 font-medium">
+            <p className="text-xs text-[#C8956C] mt-1 line-clamp-1 font-semibold">
               {product.sabores.join(" · ")}
             </p>
           )}
 
           <div className="flex items-center justify-between mt-2.5">
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <span className="price-tag">{formatPrice(product)}</span>
               {sizeLabel && (
-                <span className="text-[9px] font-bold text-[#3D2B1F]/30 uppercase">{sizeLabel}</span>
+                <span className="text-xs font-bold text-[#3D2B1F]/50 uppercase">{sizeLabel}</span>
               )}
             </div>
             {product.is_available && (
-              <div className="w-7 h-7 rounded-full bg-[#F4A261]/10 flex items-center justify-center transition-colors group-hover:bg-[#F4A261]/20">
-                <svg className="w-3.5 h-3.5 text-[#F4A261]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <div className="w-8 h-8 rounded-full bg-[#F4A261]/10 flex items-center justify-center transition-colors group-hover:bg-[#F4A261]/20">
+                <svg className="w-4 h-4 text-[#F4A261]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                 </svg>
               </div>
@@ -119,7 +119,7 @@ export function ProductCard({
         </div>
       </div>
 
-      {/* Bottom sheet — unified view, no info/order mode split */}
+      {/* Bottom sheet — unified view */}
       {expanded && (
         <div
           className="fixed inset-0 z-50 flex items-end justify-center animate-fade-in"
@@ -156,20 +156,20 @@ export function ProductCard({
                   {product.name}
                 </h3>
                 {product.description && (
-                  <p className="text-xs text-[#3D2B1F]/50 mt-1">{product.description}</p>
+                  <p className="text-sm text-[#3D2B1F]/60 mt-1">{product.description}</p>
                 )}
               </div>
               <button
                 onClick={handleClose}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-[#3D2B1F]/5 text-[#3D2B1F]/40 hover:bg-[#3D2B1F]/10 transition-colors flex-shrink-0"
+                className="w-9 h-9 flex items-center justify-center rounded-full bg-[#3D2B1F]/5 text-[#3D2B1F]/50 hover:bg-[#3D2B1F]/10 transition-colors flex-shrink-0"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
-            {/* Unified interactive view — AddToOrder handles everything */}
+            {/* Unified interactive view */}
             <AddToOrder product={product} extras={extras} onAdded={handleClose} />
           </div>
         </div>

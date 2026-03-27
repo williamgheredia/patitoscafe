@@ -12,7 +12,7 @@ function groupExtrasByPrice(extras: Extra[]): { price: number; items: Extra[] }[
     groups.set(extra.price, existing)
   }
   return Array.from(groups.entries())
-    .sort((a, b) => b[1].length - a[1].length) // larger groups first
+    .sort((a, b) => b[1].length - a[1].length)
     .map(([price, items]) => ({ price, items }))
 }
 
@@ -84,21 +84,21 @@ export function AddToOrder({
   if (!product.is_available) return null
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {/* Size selector */}
       {hasSize && (
         <div>
-          <label className="text-[10px] font-bold text-[#3D2B1F]/40 uppercase tracking-wider mb-2 block">
+          <label className="text-xs font-bold text-[#3D2B1F]/60 uppercase tracking-wider mb-2.5 block">
             Tamaño
           </label>
-          <div className="flex gap-2">
+          <div className="flex gap-2.5">
             {product.precio_m !== null && (
               <button
                 onClick={() => setSize("M")}
-                className={`flex-1 py-3 rounded-2xl text-sm font-extrabold transition-all border-2 ${
+                className={`flex-1 py-3.5 rounded-2xl text-base font-extrabold transition-all border-2 ${
                   size === "M"
                     ? "bg-[#F4A261] text-white border-[#F4A261] shadow-md shadow-[#F4A261]/20"
-                    : "bg-white text-[#3D2B1F]/60 border-[#C8956C]/15 hover:border-[#F4A261]/40"
+                    : "bg-white text-[#3D2B1F]/70 border-[#C8956C]/15 hover:border-[#F4A261]/40"
                 }`}
               >
                 Mediano · ${product.precio_m}
@@ -107,10 +107,10 @@ export function AddToOrder({
             {product.precio_g !== null && (
               <button
                 onClick={() => setSize("G")}
-                className={`flex-1 py-3 rounded-2xl text-sm font-extrabold transition-all border-2 ${
+                className={`flex-1 py-3.5 rounded-2xl text-base font-extrabold transition-all border-2 ${
                   size === "G"
                     ? "bg-[#F4A261] text-white border-[#F4A261] shadow-md shadow-[#F4A261]/20"
-                    : "bg-white text-[#3D2B1F]/60 border-[#C8956C]/15 hover:border-[#F4A261]/40"
+                    : "bg-white text-[#3D2B1F]/70 border-[#C8956C]/15 hover:border-[#F4A261]/40"
                 }`}
               >
                 Grande · ${product.precio_g}
@@ -120,13 +120,13 @@ export function AddToOrder({
         </div>
       )}
 
-      {/* Precio único — show clearly when no size choice */}
+      {/* Precio único */}
       {product.precio_unico !== null && !hasSize && (
         <div>
-          <label className="text-[10px] font-bold text-[#3D2B1F]/40 uppercase tracking-wider mb-2 block">
+          <label className="text-xs font-bold text-[#3D2B1F]/60 uppercase tracking-wider mb-2.5 block">
             Precio
           </label>
-          <div className="price-tag text-base py-2 px-4 inline-block">
+          <div className="price-tag text-lg py-2.5 px-5 inline-block">
             ${product.precio_unico}
           </div>
         </div>
@@ -135,7 +135,7 @@ export function AddToOrder({
       {/* Sabor selector */}
       {hasSabores && (
         <div>
-          <label className="text-[10px] font-bold text-[#3D2B1F]/40 uppercase tracking-wider mb-2 block">
+          <label className="text-xs font-bold text-[#3D2B1F]/60 uppercase tracking-wider mb-2.5 block">
             Sabor
           </label>
           <div className="flex flex-wrap gap-2">
@@ -143,10 +143,10 @@ export function AddToOrder({
               <button
                 key={s}
                 onClick={() => setSabor(s)}
-                className={`px-4 py-2 rounded-full text-xs font-bold transition-all border-2 ${
+                className={`px-4 py-2.5 rounded-full text-sm font-bold transition-all border-2 ${
                   sabor === s
                     ? "bg-[#3D2B1F] text-white border-[#3D2B1F]"
-                    : "bg-white text-[#3D2B1F]/60 border-[#C8956C]/15 hover:border-[#3D2B1F]/30"
+                    : "bg-white text-[#3D2B1F]/70 border-[#C8956C]/15 hover:border-[#3D2B1F]/30"
                 }`}
               >
                 {s}
@@ -159,24 +159,24 @@ export function AddToOrder({
       {/* Extras — grouped by price */}
       {extraGroups.length > 0 && (
         <div>
-          <label className="text-[10px] font-bold text-[#3D2B1F]/40 uppercase tracking-wider mb-3 block">
+          <label className="text-xs font-bold text-[#3D2B1F]/60 uppercase tracking-wider mb-3 block">
             Personaliza tu bebida
           </label>
-          <div className="space-y-3">
+          <div className="space-y-3.5">
             {extraGroups.map(({ price, items }) => (
               <div key={price}>
-                <span className="text-[11px] font-bold text-[#F4A261] mb-1.5 block">
+                <span className="text-sm font-bold text-[#F4A261] mb-2 block">
                   +${price}{items.length > 1 ? " c/u" : ""}
                 </span>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-2">
                   {items.map((extra) => (
                     <button
                       key={extra.id}
                       onClick={() => toggleExtra(extra.name)}
-                      className={`px-3 py-1.5 rounded-full text-[11px] font-bold transition-all border ${
+                      className={`px-3.5 py-2 rounded-full text-sm font-bold transition-all border ${
                         selectedExtras.includes(extra.name)
                           ? "bg-[#3D2B1F] text-white border-[#3D2B1F]"
-                          : "bg-[#FFF8F0] text-[#3D2B1F]/60 border-[#C8956C]/15 hover:border-[#C8956C]/30"
+                          : "bg-[#FFF8F0] text-[#3D2B1F]/70 border-[#C8956C]/15 hover:border-[#C8956C]/30"
                       }`}
                     >
                       {extra.name}
@@ -190,11 +190,11 @@ export function AddToOrder({
       )}
 
       {/* Add button */}
-      <div className="pt-1">
+      <div className="pt-2">
         <button
           onClick={handleAdd}
           disabled={showConfirm}
-          className={`w-full py-4 rounded-2xl font-extrabold text-sm transition-all active:scale-[0.97] ${
+          className={`w-full py-4 rounded-2xl font-extrabold text-base transition-all active:scale-[0.97] ${
             showConfirm
               ? "bg-green-500 text-white"
               : "bg-[#F4A261] text-white hover:bg-[#e8914f] shadow-lg shadow-[#F4A261]/25"
@@ -202,8 +202,8 @@ export function AddToOrder({
         >
           {showConfirm ? "✓ Agregado al pedido!" : `Agrega y pide por WhatsApp — $${getPrice()}`}
         </button>
-        <p className="text-center text-[10px] text-[#3D2B1F]/30 mt-2.5 font-medium">
-          Solo ves el menú? Cierra y pide directo en mostrador
+        <p className="text-center text-sm text-[#3D2B1F]/50 mt-3 font-medium">
+          ¿Solo ves el menú? Cierra y pide directo en mostrador
         </p>
       </div>
     </div>

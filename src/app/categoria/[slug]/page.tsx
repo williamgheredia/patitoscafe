@@ -49,9 +49,9 @@ export default async function CategoryPage({
             {/* Back link */}
             <Link
               href="/"
-              className="inline-flex items-center gap-1 text-[11px] font-bold text-[#3D2B1F]/40 hover:text-[#F4A261] transition-colors mb-4 uppercase tracking-wider"
+              className="inline-flex items-center gap-1.5 text-sm font-bold text-[#3D2B1F]/60 hover:text-[#F4A261] transition-colors mb-4 uppercase tracking-wider"
             >
-              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
               </svg>
               Menú
@@ -63,7 +63,7 @@ export default async function CategoryPage({
                 <h2 className="font-[family-name:var(--font-display)] text-2xl font-black text-[#3D2B1F] tracking-tight italic leading-tight">
                   {category.name}
                 </h2>
-                <p className="text-xs text-[#3D2B1F]/45 font-bold mt-1">
+                <p className="text-sm text-[#3D2B1F]/60 font-bold mt-1">
                   {products.length} {products.length === 1 ? "producto" : "productos"}
                 </p>
               </div>

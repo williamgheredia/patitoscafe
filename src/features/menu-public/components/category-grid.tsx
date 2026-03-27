@@ -8,19 +8,19 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
       <div className="max-w-lg mx-auto">
         {/* Hero */}
         <div className="text-center mb-8 animate-fade-up">
-          <div className="inline-flex items-center gap-1.5 bg-[#F4A261]/10 text-[#F4A261] text-xs font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-wider">
+          <div className="inline-flex items-center gap-1.5 bg-[#F4A261]/10 text-[#F4A261] text-sm font-bold px-4 py-1.5 rounded-full mb-4 uppercase tracking-wider">
             <span>📍</span> Frente a Urgencias IMSS 510
           </div>
           <h2 className="font-[family-name:var(--font-display)] text-3xl font-black text-[#3D2B1F] tracking-tight italic leading-tight">
             ¿Qué se te antoja?
           </h2>
-          <p className="text-sm text-[#3D2B1F]/45 mt-2 font-medium">
+          <p className="text-base text-[#3D2B1F]/60 mt-2 font-medium">
             Explora, elige y pide sin complicaciones
           </p>
         </div>
 
         {/* Grid — 2 cols mobile, 3 cols tablet+ */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 stagger-children">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 stagger-children">
           {categories.map((cat, i) => {
             const isLast = i === categories.length - 1
             const isOddTotal = categories.length % 2 !== 0
@@ -47,8 +47,8 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
-                  <div className="w-full py-2.5 px-2 text-center" style={{ backgroundColor: `${cat.color}dd` }}>
-                    <span className="text-xs font-extrabold text-[#3D2B1F]/80 leading-tight tracking-tight">
+                  <div className="w-full py-3 px-2 text-center" style={{ backgroundColor: `${cat.color}dd` }}>
+                    <span className="text-sm font-extrabold text-[#3D2B1F]/90 leading-tight tracking-tight">
                       {cat.emoji} {cat.name}
                     </span>
                   </div>
@@ -58,7 +58,7 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
                   <span className="text-5xl mb-2 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
                     {cat.emoji}
                   </span>
-                  <span className="text-xs font-extrabold text-[#3D2B1F]/80 text-center leading-tight tracking-tight">
+                  <span className="text-sm font-extrabold text-[#3D2B1F]/90 text-center leading-tight tracking-tight">
                     {cat.name}
                   </span>
                 </div>
