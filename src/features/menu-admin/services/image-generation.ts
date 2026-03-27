@@ -36,6 +36,7 @@ export async function generateProductImage(
       body: JSON.stringify({
         model: "google/gemini-2.5-flash-image",
         messages: [{ role: "user", content: prompt }],
+        image_config: { aspect_ratio: "3:4" },
       }),
     })
 

@@ -65,7 +65,7 @@ export function ProductCard({
         )}
 
         {product.image_url ? (
-          <div className="aspect-[4/3] bg-white overflow-hidden">
+          <div className="aspect-[3/4] bg-white overflow-hidden">
             <img
               src={product.image_url}
               alt={product.name}
@@ -74,7 +74,7 @@ export function ProductCard({
           </div>
         ) : (
           <div
-            className="aspect-[4/3] flex items-center justify-center relative overflow-hidden"
+            className="aspect-[3/4] flex items-center justify-center relative overflow-hidden"
             style={{ backgroundColor: `${categoryColor}40` }}
           >
             <div
