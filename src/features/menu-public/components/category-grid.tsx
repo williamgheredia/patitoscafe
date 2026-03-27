@@ -18,13 +18,18 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
           </p>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-3 gap-3 stagger-children">
-          {categories.map((cat, i) => (
+        {/* Grid — 2 cols mobile, 3 cols tablet+ */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 stagger-children">
+          {categories.map((cat, i) => {
+            const isLast = i === categories.length - 1
+            const isOddTotal = categories.length % 2 !== 0
+            const makeFullWidth = isLast && isOddTotal
+
+            return (
             <Link
               key={cat.id}
               href={`/categoria/${cat.slug}`}
-              className="group relative flex flex-col items-center justify-center rounded-[20px] overflow-hidden transition-all duration-300 hover:scale-[1.04] hover:-translate-y-1 active:scale-95 border border-white/60"
+              className={`group relative flex flex-col items-center justify-center rounded-[20px] overflow-hidden transition-all duration-300 hover:scale-[1.04] hover:-translate-y-1 active:scale-95 border border-white/60 ${makeFullWidth ? "col-span-2 sm:col-span-1" : ""}`}
               style={{
                 backgroundColor: cat.color ?? "#f5f5f5",
                 boxShadow: `0 4px 20px -4px ${cat.color}60, 0 1px 3px rgba(61,43,31,0.04)`,
@@ -39,24 +44,25 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
-                  <div className="w-full py-2 px-2 text-center" style={{ backgroundColor: `${cat.color}dd` }}>
-                    <span className="text-[11px] font-extrabold text-[#3D2B1F]/80 leading-tight tracking-tight">
+                  <div className="w-full py-2.5 px-2 text-center" style={{ backgroundColor: `${cat.color}dd` }}>
+                    <span className="text-xs font-extrabold text-[#3D2B1F]/80 leading-tight tracking-tight">
                       {cat.emoji} {cat.name}
                     </span>
                   </div>
                 </>
               ) : (
-                <div className="p-4 pt-5 flex flex-col items-center justify-center">
-                  <span className="text-4xl mb-2 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
+                <div className="p-5 pt-6 flex flex-col items-center justify-center">
+                  <span className="text-5xl mb-2 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
                     {cat.emoji}
                   </span>
-                  <span className="text-[11px] font-extrabold text-[#3D2B1F]/80 text-center leading-tight tracking-tight">
+                  <span className="text-xs font-extrabold text-[#3D2B1F]/80 text-center leading-tight tracking-tight">
                     {cat.name}
                   </span>
                 </div>
               )}
             </Link>
-          ))}
+            )
+          })}
         </div>
 
         {/* Decorative wave */}

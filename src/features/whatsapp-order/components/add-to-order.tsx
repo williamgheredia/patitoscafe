@@ -200,7 +200,7 @@ export function AddToOrder({
               : "bg-[#F4A261] text-white hover:bg-[#e8914f] shadow-lg shadow-[#F4A261]/25"
           }`}
         >
-          {showConfirm ? "✓ Agregado al pedido!" : `Agregar — $${getPrice()}`}
+          {showConfirm ? "✓ Agregado al pedido!" : `Agrega y pide por WhatsApp — $${getPrice()}`}
         </button>
         <p className="text-center text-[10px] text-[#3D2B1F]/30 mt-2.5 font-medium">
           Solo ves el menú? Cierra y pide directo en mostrador
