@@ -24,24 +24,37 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
             <Link
               key={cat.id}
               href={`/categoria/${cat.slug}`}
-              className="group relative flex flex-col items-center justify-center rounded-[20px] p-4 pt-5 transition-all duration-300 hover:scale-[1.04] hover:-translate-y-1 active:scale-95 border border-white/60"
+              className="group relative flex flex-col items-center justify-center rounded-[20px] overflow-hidden transition-all duration-300 hover:scale-[1.04] hover:-translate-y-1 active:scale-95 border border-white/60"
               style={{
                 backgroundColor: cat.color ?? "#f5f5f5",
                 boxShadow: `0 4px 20px -4px ${cat.color}60, 0 1px 3px rgba(61,43,31,0.04)`,
               }}
             >
-              {/* Decorative dot */}
-              <div
-                className="absolute top-2 right-2 w-2 h-2 rounded-full opacity-40"
-                style={{ backgroundColor: "#3D2B1F" }}
-              />
-
-              <span className="text-4xl mb-2 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
-                {cat.emoji}
-              </span>
-              <span className="text-[11px] font-extrabold text-[#3D2B1F]/80 text-center leading-tight tracking-tight">
-                {cat.name}
-              </span>
+              {cat.image_url ? (
+                <>
+                  <div className="w-full aspect-square overflow-hidden">
+                    <img
+                      src={cat.image_url}
+                      alt={cat.name}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  </div>
+                  <div className="w-full py-2 px-2 text-center" style={{ backgroundColor: `${cat.color}dd` }}>
+                    <span className="text-[11px] font-extrabold text-[#3D2B1F]/80 leading-tight tracking-tight">
+                      {cat.emoji} {cat.name}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <div className="p-4 pt-5 flex flex-col items-center justify-center">
+                  <span className="text-4xl mb-2 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
+                    {cat.emoji}
+                  </span>
+                  <span className="text-[11px] font-extrabold text-[#3D2B1F]/80 text-center leading-tight tracking-tight">
+                    {cat.name}
+                  </span>
+                </div>
+              )}
             </Link>
           ))}
         </div>

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import type { Product, Category } from "@/features/menu-public/types/menu"
 import { ProductForm } from "./product-form"
 import { deleteProduct } from "../services/menu-actions"
+import { generateCategoryImage } from "../services/image-generation"
 
 function ProductRow({
   product,
@@ -98,6 +99,8 @@ function CategorySection({
 }) {
   const [collapsed, setCollapsed] = useState(false)
   const [showNew, setShowNew] = useState(false)
+  const [genCatImg, setGenCatImg] = useState(false)
+  const [catImgPreview, setCatImgPreview] = useState(category.image_url)
   const router = useRouter()
 
   async function handleDelete(id: string, name: string) {
@@ -106,8 +109,26 @@ function CategorySection({
     router.refresh()
   }
 
+  async function handleGenCategoryImage() {
+    setGenCatImg(true)
+    const productNames = products.map((p) => p.name)
+    const result = await generateCategoryImage(category.id, category.name, productNames)
+    if (result.success && result.imageUrl) {
+      setCatImgPreview(result.imageUrl)
+    }
+    setGenCatImg(false)
+    router.refresh()
+  }
+
   return (
     <div className="rounded-2xl border border-[#C8956C]/12 overflow-hidden bg-white shadow-sm shadow-[#C8956C]/5">
+      {/* Category image */}
+      {catImgPreview && (
+        <div className="h-24 overflow-hidden">
+          <img src={catImgPreview} alt={category.name} className="w-full h-full object-cover" />
+        </div>
+      )}
+
       {/* Category header */}
       <button
         onClick={() => setCollapsed(!collapsed)}
@@ -122,6 +143,20 @@ function CategorySection({
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <span
+            onClick={(e) => {
+              e.stopPropagation()
+              handleGenCategoryImage()
+            }}
+            className={`w-7 h-7 flex items-center justify-center rounded-lg bg-white/70 hover:bg-white text-purple-400 transition-colors cursor-pointer ${genCatImg ? "animate-pulse" : ""}`}
+            title="Generar foto de categoría"
+          >
+            {genCatImg ? (
+              <span className="animate-spin inline-block w-3 h-3 border-2 border-purple-300 border-t-purple-600 rounded-full" />
+            ) : (
+              <span className="text-xs">✨</span>
+            )}
+          </span>
           <span
             onClick={(e) => {
               e.stopPropagation()
