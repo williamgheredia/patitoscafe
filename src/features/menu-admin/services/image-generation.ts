@@ -97,7 +97,7 @@ export async function generateProductImage(
 
     const ext = result.mimeType!.includes("png") ? "png" : "jpg"
     const { publicUrl } = await uploadImage(
-      `${productId}-ai.${ext}`,
+      `${productId}-${Date.now()}.${ext}`,
       result.buffer!,
       result.mimeType!
     )
@@ -140,7 +140,7 @@ export async function generateCategoryImage(
 
     const ext = result.mimeType!.includes("png") ? "png" : "jpg"
     const { publicUrl } = await uploadImage(
-      `category-${categoryId}-ai.${ext}`,
+      `cat-${categoryId}-${Date.now()}.${ext}`,
       result.buffer!,
       result.mimeType!
     )
