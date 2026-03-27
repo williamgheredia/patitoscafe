@@ -33,12 +33,10 @@ export function ProductCard({
   extras: Extra[]
 }) {
   const [expanded, setExpanded] = useState(false)
-  const [orderMode, setOrderMode] = useState(false)
   const sizeLabel = formatSizeLabel(product)
 
   function handleClose() {
     setExpanded(false)
-    setOrderMode(false)
   }
 
   return (
@@ -120,7 +118,7 @@ export function ProductCard({
         </div>
       </div>
 
-      {/* Bottom sheet */}
+      {/* Bottom sheet — unified view, no info/order mode split */}
       {expanded && (
         <div
           className="fixed inset-0 z-50 flex items-end justify-center animate-fade-in"
@@ -170,93 +168,8 @@ export function ProductCard({
               </button>
             </div>
 
-            {/* Info section — always visible */}
-            <div className="space-y-4">
-              {/* Prices */}
-              <div>
-                <label className="text-[10px] font-bold text-[#3D2B1F]/40 uppercase tracking-wider mb-2 block">
-                  Precios
-                </label>
-                <div className="flex gap-2.5 flex-wrap">
-                  {product.precio_unico !== null && (
-                    <div className="price-tag text-base py-2 px-4">
-                      ${product.precio_unico}
-                    </div>
-                  )}
-                  {product.precio_m !== null && (
-                    <div className="flex flex-col items-center gap-1">
-                      <div className="price-tag text-base py-2 px-4">
-                        ${product.precio_m}
-                      </div>
-                      <span className="text-[9px] font-bold text-[#3D2B1F]/30 uppercase">Mediano</span>
-                    </div>
-                  )}
-                  {product.precio_g !== null && (
-                    <div className="flex flex-col items-center gap-1">
-                      <div className="price-tag text-base py-2 px-4">
-                        ${product.precio_g}
-                      </div>
-                      <span className="text-[9px] font-bold text-[#3D2B1F]/30 uppercase">Grande</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Sabores — informational */}
-              {product.sabores.length > 0 && (
-                <div>
-                  <label className="text-[10px] font-bold text-[#3D2B1F]/40 uppercase tracking-wider mb-2 block">
-                    Sabores disponibles
-                  </label>
-                  <div className="flex flex-wrap gap-2">
-                    {product.sabores.map((s) => (
-                      <span
-                        key={s}
-                        className="px-3 py-1.5 rounded-full text-xs font-bold bg-[#FFF8F0] text-[#3D2B1F]/60 border border-[#C8956C]/12"
-                      >
-                        {s}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Extras — informational */}
-              {extras.length > 0 && (
-                <div>
-                  <label className="text-[10px] font-bold text-[#3D2B1F]/40 uppercase tracking-wider mb-2 block">
-                    Extras disponibles
-                  </label>
-                  <div className="flex flex-wrap gap-1.5">
-                    {extras.map((extra) => (
-                      <span
-                        key={extra.id}
-                        className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#FFF8F0] text-[#3D2B1F]/50 border border-[#C8956C]/12"
-                      >
-                        {extra.name} <span className="text-[#F4A261]">+${extra.price}</span>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Divider */}
-            <div className="border-t border-[#C8956C]/10 my-5" />
-
-            {/* Order mode toggle / AddToOrder */}
-            {!orderMode ? (
-              <button
-                onClick={() => setOrderMode(true)}
-                className="w-full py-3.5 rounded-2xl text-sm font-bold border-2 border-[#C8956C]/20 text-[#3D2B1F]/50 hover:border-[#25D366]/40 hover:text-[#25D366] transition-all flex items-center justify-center gap-2"
-              >
-                <span>📱</span> Agregar al pedido por WhatsApp
-              </button>
-            ) : (
-              <div className="animate-fade-up">
-                <AddToOrder product={product} extras={extras} onAdded={handleClose} />
-              </div>
-            )}
+            {/* Unified interactive view — AddToOrder handles everything */}
+            <AddToOrder product={product} extras={extras} onAdded={handleClose} />
           </div>
         </div>
       )}

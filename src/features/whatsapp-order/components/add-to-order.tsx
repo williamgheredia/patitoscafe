@@ -1,8 +1,20 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import type { Product, Extra } from "@/features/menu-public/types/menu"
 import { useOrderStore } from "../store/order-store"
+
+function groupExtrasByPrice(extras: Extra[]): { price: number; items: Extra[] }[] {
+  const groups = new Map<number, Extra[]>()
+  for (const extra of extras) {
+    const existing = groups.get(extra.price) ?? []
+    existing.push(extra)
+    groups.set(extra.price, existing)
+  }
+  return Array.from(groups.entries())
+    .sort((a, b) => b[1].length - a[1].length) // larger groups first
+    .map(([price, items]) => ({ price, items }))
+}
 
 export function AddToOrder({
   product,
@@ -28,6 +40,8 @@ export function AddToOrder({
   )
   const [selectedExtras, setSelectedExtras] = useState<string[]>([])
   const [showConfirm, setShowConfirm] = useState(false)
+
+  const extraGroups = useMemo(() => groupExtrasByPrice(extras), [extras])
 
   function getPrice(): number {
     let base = 0
@@ -106,6 +120,18 @@ export function AddToOrder({
         </div>
       )}
 
+      {/* Precio único — show clearly when no size choice */}
+      {product.precio_unico !== null && !hasSize && (
+        <div>
+          <label className="text-[10px] font-bold text-[#3D2B1F]/40 uppercase tracking-wider mb-2 block">
+            Precio
+          </label>
+          <div className="price-tag text-base py-2 px-4 inline-block">
+            ${product.precio_unico}
+          </div>
+        </div>
+      )}
+
       {/* Sabor selector */}
       {hasSabores && (
         <div>
@@ -130,42 +156,56 @@ export function AddToOrder({
         </div>
       )}
 
-      {/* Extras */}
-      {extras.length > 0 && (
+      {/* Extras — grouped by price */}
+      {extraGroups.length > 0 && (
         <div>
-          <label className="text-[10px] font-bold text-[#3D2B1F]/40 uppercase tracking-wider mb-2 block">
-            Extras
+          <label className="text-[10px] font-bold text-[#3D2B1F]/40 uppercase tracking-wider mb-3 block">
+            Personaliza tu bebida
           </label>
-          <div className="flex flex-wrap gap-2">
-            {extras.map((extra) => (
-              <button
-                key={extra.id}
-                onClick={() => toggleExtra(extra.name)}
-                className={`px-3 py-1.5 rounded-full text-[11px] font-bold transition-all border ${
-                  selectedExtras.includes(extra.name)
-                    ? "bg-[#3D2B1F] text-white border-[#3D2B1F]"
-                    : "bg-[#FFF8F0] text-[#3D2B1F]/50 border-[#C8956C]/15 hover:border-[#C8956C]/30"
-                }`}
-              >
-                + {extra.name} <span className="opacity-60">${extra.price}</span>
-              </button>
+          <div className="space-y-3">
+            {extraGroups.map(({ price, items }) => (
+              <div key={price}>
+                <span className="text-[11px] font-bold text-[#F4A261] mb-1.5 block">
+                  +${price}{items.length > 1 ? " c/u" : ""}
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {items.map((extra) => (
+                    <button
+                      key={extra.id}
+                      onClick={() => toggleExtra(extra.name)}
+                      className={`px-3 py-1.5 rounded-full text-[11px] font-bold transition-all border ${
+                        selectedExtras.includes(extra.name)
+                          ? "bg-[#3D2B1F] text-white border-[#3D2B1F]"
+                          : "bg-[#FFF8F0] text-[#3D2B1F]/60 border-[#C8956C]/15 hover:border-[#C8956C]/30"
+                      }`}
+                    >
+                      {extra.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>
       )}
 
       {/* Add button */}
-      <button
-        onClick={handleAdd}
-        disabled={showConfirm}
-        className={`w-full py-4 rounded-2xl font-extrabold text-sm transition-all active:scale-[0.97] ${
-          showConfirm
-            ? "bg-green-500 text-white"
-            : "bg-[#F4A261] text-white hover:bg-[#e8914f] shadow-lg shadow-[#F4A261]/25"
-        }`}
-      >
-        {showConfirm ? "✓ Agregado al pedido!" : `Agregar — $${getPrice()}`}
-      </button>
+      <div className="pt-1">
+        <button
+          onClick={handleAdd}
+          disabled={showConfirm}
+          className={`w-full py-4 rounded-2xl font-extrabold text-sm transition-all active:scale-[0.97] ${
+            showConfirm
+              ? "bg-green-500 text-white"
+              : "bg-[#F4A261] text-white hover:bg-[#e8914f] shadow-lg shadow-[#F4A261]/25"
+          }`}
+        >
+          {showConfirm ? "✓ Agregado al pedido!" : `Agregar — $${getPrice()}`}
+        </button>
+        <p className="text-center text-[10px] text-[#3D2B1F]/30 mt-2.5 font-medium">
+          Solo ves el menú? Cierra y pide directo en mostrador
+        </p>
+      </div>
     </div>
   )
 }
