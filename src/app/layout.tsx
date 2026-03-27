@@ -49,7 +49,7 @@ export default function RootLayout({
       </head>
       <body className="font-[family-name:var(--font-nunito)] min-h-screen bg-[#FFF8F0]">
         {children}
-        <Script id="sw-register" strategy="lazyOnload">
+        <Script id="sw-register" strategy="afterInteractive">
           {`if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}`}
         </Script>
       </body>

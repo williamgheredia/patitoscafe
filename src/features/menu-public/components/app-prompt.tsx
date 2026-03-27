@@ -7,30 +7,107 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>
 }
 
-async function subscribeToPush(): Promise<boolean> {
+// Convert base64url VAPID key to Uint8Array (required by pushManager.subscribe)
+function urlBase64ToUint8Array(base64String: string): Uint8Array {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4)
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/")
+  const rawData = window.atob(base64)
+  const outputArray = new Uint8Array(rawData.length)
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i)
+  }
+  return outputArray
+}
+
+async function subscribeToPush(): Promise<{ ok: boolean; error?: string }> {
+  // Check browser support
+  if (!("serviceWorker" in navigator)) {
+    return { ok: false, error: "Tu navegador no soporta notificaciones" }
+  }
+  if (!("PushManager" in window)) {
+    return { ok: false, error: "Tu navegador no soporta notificaciones push" }
+  }
+
+  const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
+  if (!vapidKey) {
+    return { ok: false, error: "Configuración de notificaciones incompleta" }
+  }
+
+  // Request notification permission
+  let permission: NotificationPermission
   try {
-    if (!("serviceWorker" in navigator) || !("PushManager" in window)) return false
+    permission = await Notification.requestPermission()
+  } catch {
+    return { ok: false, error: "No se pudo pedir permiso de notificaciones" }
+  }
 
-    const permission = await Notification.requestPermission()
-    if (permission !== "granted") return false
+  if (permission !== "granted") {
+    return { ok: false, error: "Permiso de notificaciones denegado" }
+  }
 
-    const reg = await navigator.serviceWorker.ready
-    const sub = await reg.pushManager.subscribe({
+  // Wait for service worker with timeout
+  let reg: ServiceWorkerRegistration
+  try {
+    reg = await Promise.race([
+      navigator.serviceWorker.ready,
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("timeout")), 5000)
+      ),
+    ])
+  } catch {
+    // Service worker not ready — try registering it now
+    try {
+      reg = await navigator.serviceWorker.register("/sw.js")
+      // Wait for it to activate
+      await new Promise<void>((resolve) => {
+        if (reg.active) { resolve(); return }
+        const sw = reg.installing || reg.waiting
+        if (sw) {
+          sw.addEventListener("statechange", () => {
+            if (sw.state === "activated") resolve()
+          })
+        } else {
+          resolve()
+        }
+      })
+    } catch (e) {
+      return { ok: false, error: `Error registrando service worker: ${e}` }
+    }
+  }
+
+  // Subscribe to push
+  let sub: PushSubscription
+  try {
+    const keyArray = urlBase64ToUint8Array(vapidKey)
+    sub = await reg.pushManager.subscribe({
       userVisibleOnly: true,
-      applicationServerKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+      applicationServerKey: keyArray.buffer as ArrayBuffer,
     })
+  } catch (e) {
+    return { ok: false, error: `Error suscribiendo: ${e}` }
+  }
 
-    const json = sub.toJSON()
+  // Send subscription to server
+  const json = sub.toJSON()
+  if (!json.endpoint || !json.keys?.p256dh || !json.keys?.auth) {
+    return { ok: false, error: "Suscripción incompleta" }
+  }
+
+  try {
     const res = await fetch("/api/push/subscribe", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ endpoint: json.endpoint, keys: json.keys }),
     })
 
-    return res.ok
-  } catch (err) {
-    console.error("Push subscribe error:", err)
-    return false
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}))
+      return { ok: false, error: data.error || `Server error: ${res.status}` }
+    }
+
+    return { ok: true }
+  } catch (e) {
+    return { ok: false, error: `Error de red: ${e}` }
   }
 }
 
@@ -39,25 +116,29 @@ type PromptMode = "install" | "push-only" | "ios" | "hidden"
 export function AppPrompt() {
   const [mode, setMode] = useState<PromptMode>("hidden")
   const [busy, setBusy] = useState(false)
+  const [error, setError] = useState("")
   const deferredPrompt = useRef<BeforeInstallPromptEvent | null>(null)
 
   useEffect(() => {
-    // Already dismissed
     if (localStorage.getItem("patitos_app_dismissed")) return
-    // Already installed as standalone
     if (window.matchMedia("(display-mode: standalone)").matches) return
 
-    // Check if already subscribed to push
+    // Check if already subscribed
     if ("serviceWorker" in navigator && "PushManager" in window) {
-      navigator.serviceWorker.ready.then((reg) => {
-        reg.pushManager.getSubscription().then((sub) => {
-          if (sub) return // Already subscribed, don't show anything
+      navigator.serviceWorker.ready
+        .then((reg) => reg.pushManager.getSubscription())
+        .then((sub) => {
+          if (sub) {
+            localStorage.setItem("patitos_app_dismissed", "1")
+            return
+          }
         })
-      })
+        .catch(() => {})
     }
 
-    // Detect iOS
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    // iOS detection
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
       (navigator.userAgent.includes("Mac") && "ontouchend" in document)
 
     if (isIOS) {
@@ -74,17 +155,10 @@ export function AppPrompt() {
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstall)
 
-    // If no install prompt after 5s (already installed or not supported), show push-only
+    // Fallback: if no install prompt after 5s, show push-only
     const fallbackTimer = setTimeout(() => {
       if (!deferredPrompt.current) {
-        // Check if push is available and not subscribed
-        if ("PushManager" in window) {
-          navigator.serviceWorker?.ready.then((reg) => {
-            reg.pushManager.getSubscription().then((sub) => {
-              if (!sub) setMode("push-only")
-            })
-          })
-        }
+        setMode("push-only")
       }
     }, 5000)
 
@@ -97,19 +171,22 @@ export function AppPrompt() {
   async function handleInstall() {
     if (!deferredPrompt.current) return
     setBusy(true)
+    setError("")
 
-    // Step 1: Trigger install
     await deferredPrompt.current.prompt()
     const { outcome } = await deferredPrompt.current.userChoice
     deferredPrompt.current = null
 
     if (outcome === "accepted") {
-      // Step 2: Immediately subscribe to push
-      await subscribeToPush()
+      const result = await subscribeToPush()
+      // Installed — dismiss regardless of push result
       setMode("hidden")
       localStorage.setItem("patitos_app_dismissed", "1")
+      if (!result.ok) {
+        // Installed but push failed — that's ok
+        console.log("PWA installed, push subscribe failed:", result.error)
+      }
     } else {
-      // Didn't install — show push-only after a moment
       setBusy(false)
       setTimeout(() => setMode("push-only"), 2000)
     }
@@ -117,12 +194,18 @@ export function AppPrompt() {
 
   async function handlePushOnly() {
     setBusy(true)
-    const ok = await subscribeToPush()
-    if (ok) {
+    setError("")
+
+    const result = await subscribeToPush()
+
+    if (result.ok) {
       setMode("hidden")
+      localStorage.setItem("patitos_app_dismissed", "1")
+    } else {
+      // Show error — DON'T dismiss, let user retry
+      setError(result.error || "Error desconocido")
+      setBusy(false)
     }
-    setBusy(false)
-    localStorage.setItem("patitos_app_dismissed", "1")
   }
 
   function handleDismiss() {
@@ -172,6 +255,11 @@ export function AppPrompt() {
                 <p className="text-xs text-white/60 mt-1">
                   Te avisamos de promos, nuevos productos y ofertas especiales
                 </p>
+                {error && (
+                  <p className="text-xs text-red-400 mt-2 bg-red-400/10 rounded-lg px-2 py-1">
+                    {error}
+                  </p>
+                )}
                 <div className="flex gap-2 mt-3">
                   <button
                     onClick={handlePushOnly}
