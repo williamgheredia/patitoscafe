@@ -3,6 +3,7 @@
 import { useState, useRef } from "react"
 import type { Category, Product } from "@/features/menu-public/types/menu"
 import { createProduct, updateProduct, uploadProductImage } from "../services/menu-actions"
+import { generateProductImage } from "../services/image-generation"
 
 export function ProductForm({
   categories,
@@ -16,6 +17,8 @@ export function ProductForm({
   onDone: () => void
 }) {
   const [loading, setLoading] = useState(false)
+  const [generating, setGenerating] = useState(false)
+  const [genError, setGenError] = useState("")
   const [imagePreview, setImagePreview] = useState<string | null>(product?.image_url ?? null)
   const [imageFile, setImageFile] = useState<File | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
@@ -108,6 +111,40 @@ export function ProductForm({
               className="hidden"
             />
           </div>
+
+          {/* AI Generate button — only for existing products */}
+          {product && (
+            <button
+              type="button"
+              disabled={generating}
+              onClick={async () => {
+                setGenerating(true)
+                setGenError("")
+                const catName = categories.find(c => c.id === product.category_id)?.name ?? "Café"
+                const result = await generateProductImage(product.id, product.name, catName)
+                if (result.success && result.imageUrl) {
+                  setImagePreview(result.imageUrl)
+                  setImageFile(null)
+                } else {
+                  setGenError(result.error ?? "Error")
+                }
+                setGenerating(false)
+              }}
+              className="w-full mt-2 py-2 rounded-xl text-xs font-bold border border-purple-200 text-purple-500 hover:bg-purple-50 disabled:opacity-40 transition-colors flex items-center justify-center gap-1.5"
+            >
+              {generating ? (
+                <>
+                  <span className="animate-spin inline-block w-3 h-3 border-2 border-purple-300 border-t-purple-600 rounded-full" />
+                  Generando imagen...
+                </>
+              ) : (
+                <>✨ Generar foto con IA</>
+              )}
+            </button>
+          )}
+          {genError && (
+            <p className="text-xs text-red-500 mt-1 text-center">{genError}</p>
+          )}
         </div>
 
         {/* Category */}

@@ -220,6 +220,25 @@ export function ProductCard({
                   </div>
                 </div>
               )}
+
+              {/* Extras — informational */}
+              {extras.length > 0 && (
+                <div>
+                  <label className="text-[10px] font-bold text-[#3D2B1F]/40 uppercase tracking-wider mb-2 block">
+                    Extras disponibles
+                  </label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {extras.map((extra) => (
+                      <span
+                        key={extra.id}
+                        className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#FFF8F0] text-[#3D2B1F]/50 border border-[#C8956C]/12"
+                      >
+                        {extra.name} <span className="text-[#F4A261]">+${extra.price}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Divider */}
