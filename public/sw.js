@@ -1,4 +1,4 @@
-const CACHE_NAME = "patitos-v1"
+const CACHE_NAME = "patitos-v2"
 const OFFLINE_URL = "/"
 
 self.addEventListener("install", (event) => {
@@ -23,4 +23,33 @@ self.addEventListener("fetch", (event) => {
       fetch(event.request).catch(() => caches.match(OFFLINE_URL))
     )
   }
+})
+
+// Push notifications
+self.addEventListener("push", (event) => {
+  const data = event.data ? event.data.json() : {}
+  const title = data.title || "Patitos Café 🐥"
+  const options = {
+    body: data.body || "¡Tenemos algo nuevo para ti!",
+    icon: data.icon || "/icon-192.png",
+    badge: "/favicon.png",
+    vibrate: [100, 50, 100],
+    data: { url: data.url || "/" },
+  }
+  event.waitUntil(self.registration.showNotification(title, options))
+})
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close()
+  const url = event.notification.data?.url || "/"
+  event.waitUntil(
+    self.clients.matchAll({ type: "window" }).then((clients) => {
+      for (const client of clients) {
+        if (client.url.includes(self.location.origin) && "focus" in client) {
+          return client.focus()
+        }
+      }
+      return self.clients.openWindow(url)
+    })
+  )
 })
