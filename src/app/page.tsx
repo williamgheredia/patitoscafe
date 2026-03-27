@@ -2,6 +2,7 @@ import { MenuHeader } from "@/features/menu-public/components/menu-header"
 import { CategoryGrid } from "@/features/menu-public/components/category-grid"
 import { WhatsAppButton } from "@/features/whatsapp-order/components/whatsapp-button"
 import { PushPrompt } from "@/features/menu-public/components/push-prompt"
+import { InstallPrompt } from "@/features/menu-public/components/install-prompt"
 import { getCategories } from "@/features/menu-public/services/menu-queries"
 
 export default async function HomePage() {
@@ -12,6 +13,7 @@ export default async function HomePage() {
       <MenuHeader />
       <CategoryGrid categories={categories} />
       <WhatsAppButton />
+      <InstallPrompt />
       <PushPrompt />
     </div>
   )
