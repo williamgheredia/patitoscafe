@@ -11,6 +11,8 @@ export function WhatsAppButton() {
   const total = getTotal()
   const hasItems = count > 0
 
+  if (!hasItems) return null
+
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 pointer-events-none">
       <div className="bg-gradient-to-t from-[#FFF8F0] via-[#FFF8F0]/90 to-transparent pt-10 pb-4 px-4">

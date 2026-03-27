@@ -7,7 +7,7 @@ export default async function HomePage() {
   const categories = await getCategories()
 
   return (
-    <div className="min-h-screen bg-[#FFF8F0] pb-24">
+    <div className="min-h-screen bg-[#FFF8F0] pb-8">
       <MenuHeader />
       <CategoryGrid categories={categories} />
       <WhatsAppButton />

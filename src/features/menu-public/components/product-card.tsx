@@ -33,11 +33,17 @@ export function ProductCard({
   extras: Extra[]
 }) {
   const [expanded, setExpanded] = useState(false)
+  const [orderMode, setOrderMode] = useState(false)
   const sizeLabel = formatSizeLabel(product)
+
+  function handleClose() {
+    setExpanded(false)
+    setOrderMode(false)
+  }
 
   return (
     <>
-      {/* Normal card */}
+      {/* Card */}
       <div
         className={`group relative rounded-[20px] overflow-hidden transition-all duration-300 ${
           !product.is_available
@@ -52,14 +58,12 @@ export function ProductCard({
           }
         }}
       >
-        {/* Agotado badge */}
         {!product.is_available && (
           <div className="absolute top-3 right-3 z-10 bg-[#3D2B1F] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full tracking-wide uppercase">
             Agotado
           </div>
         )}
 
-        {/* Image / Emoji placeholder */}
         {product.image_url ? (
           <div className="aspect-[4/3] bg-white overflow-hidden">
             <img
@@ -73,7 +77,6 @@ export function ProductCard({
             className="aspect-[4/3] flex items-center justify-center relative overflow-hidden"
             style={{ backgroundColor: `${categoryColor}40` }}
           >
-            {/* Decorative circles */}
             <div
               className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-20"
               style={{ backgroundColor: categoryColor }}
@@ -88,7 +91,6 @@ export function ProductCard({
           </div>
         )}
 
-        {/* Content */}
         <div className="p-3.5 bg-white">
           <h3 className="font-extrabold text-[#3D2B1F] text-[13px] leading-tight tracking-tight">
             {product.name}
@@ -110,7 +112,7 @@ export function ProductCard({
             {product.is_available && (
               <div className="w-7 h-7 rounded-full bg-[#F4A261]/10 flex items-center justify-center transition-colors group-hover:bg-[#F4A261]/20">
                 <svg className="w-3.5 h-3.5 text-[#F4A261]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                 </svg>
               </div>
             )}
@@ -118,16 +120,14 @@ export function ProductCard({
         </div>
       </div>
 
-      {/* Expanded overlay / bottom sheet */}
+      {/* Bottom sheet */}
       {expanded && (
         <div
           className="fixed inset-0 z-50 flex items-end justify-center animate-fade-in"
-          onClick={() => setExpanded(false)}
+          onClick={handleClose}
         >
-          {/* Backdrop */}
           <div className="absolute inset-0 bg-[#3D2B1F]/40 backdrop-blur-sm" />
 
-          {/* Sheet */}
           <div
             className="relative w-full max-w-lg bg-white rounded-t-[28px] p-6 pt-5 animate-scale-in"
             style={{ maxHeight: "85vh", overflowY: "auto" }}
@@ -156,14 +156,12 @@ export function ProductCard({
                 <h3 className="font-[family-name:var(--font-display)] text-xl font-black text-[#3D2B1F] tracking-tight italic leading-tight">
                   {product.name}
                 </h3>
-                {product.sabores.length > 0 && (
-                  <p className="text-xs text-[#C8956C] mt-1.5 font-medium">
-                    {product.sabores.join(" · ")}
-                  </p>
+                {product.description && (
+                  <p className="text-xs text-[#3D2B1F]/50 mt-1">{product.description}</p>
                 )}
               </div>
               <button
-                onClick={() => setExpanded(false)}
+                onClick={handleClose}
                 className="w-8 h-8 flex items-center justify-center rounded-full bg-[#3D2B1F]/5 text-[#3D2B1F]/40 hover:bg-[#3D2B1F]/10 transition-colors flex-shrink-0"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -172,8 +170,74 @@ export function ProductCard({
               </button>
             </div>
 
-            {/* Order controls */}
-            <AddToOrder product={product} extras={extras} onAdded={() => setExpanded(false)} />
+            {/* Info section — always visible */}
+            <div className="space-y-4">
+              {/* Prices */}
+              <div>
+                <label className="text-[10px] font-bold text-[#3D2B1F]/40 uppercase tracking-wider mb-2 block">
+                  Precios
+                </label>
+                <div className="flex gap-2.5 flex-wrap">
+                  {product.precio_unico !== null && (
+                    <div className="price-tag text-base py-2 px-4">
+                      ${product.precio_unico}
+                    </div>
+                  )}
+                  {product.precio_m !== null && (
+                    <div className="flex flex-col items-center gap-1">
+                      <div className="price-tag text-base py-2 px-4">
+                        ${product.precio_m}
+                      </div>
+                      <span className="text-[9px] font-bold text-[#3D2B1F]/30 uppercase">Mediano</span>
+                    </div>
+                  )}
+                  {product.precio_g !== null && (
+                    <div className="flex flex-col items-center gap-1">
+                      <div className="price-tag text-base py-2 px-4">
+                        ${product.precio_g}
+                      </div>
+                      <span className="text-[9px] font-bold text-[#3D2B1F]/30 uppercase">Grande</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Sabores — informational */}
+              {product.sabores.length > 0 && (
+                <div>
+                  <label className="text-[10px] font-bold text-[#3D2B1F]/40 uppercase tracking-wider mb-2 block">
+                    Sabores disponibles
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {product.sabores.map((s) => (
+                      <span
+                        key={s}
+                        className="px-3 py-1.5 rounded-full text-xs font-bold bg-[#FFF8F0] text-[#3D2B1F]/60 border border-[#C8956C]/12"
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-[#C8956C]/10 my-5" />
+
+            {/* Order mode toggle / AddToOrder */}
+            {!orderMode ? (
+              <button
+                onClick={() => setOrderMode(true)}
+                className="w-full py-3.5 rounded-2xl text-sm font-bold border-2 border-[#C8956C]/20 text-[#3D2B1F]/50 hover:border-[#25D366]/40 hover:text-[#25D366] transition-all flex items-center justify-center gap-2"
+              >
+                <span>📱</span> Agregar al pedido por WhatsApp
+              </button>
+            ) : (
+              <div className="animate-fade-up">
+                <AddToOrder product={product} extras={extras} onAdded={handleClose} />
+              </div>
+            )}
           </div>
         </div>
       )}

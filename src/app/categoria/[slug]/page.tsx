@@ -26,7 +26,7 @@ export default async function CategoryPage({
   ])
 
   return (
-    <div className="min-h-screen bg-[#FFF8F0] pb-28">
+    <div className="min-h-screen bg-[#FFF8F0] pb-8">
       <MenuHeader />
 
       <div className="max-w-lg mx-auto">
