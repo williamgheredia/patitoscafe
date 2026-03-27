@@ -62,11 +62,11 @@ function ProductCard({
   return (
     <div className={`rounded-2xl overflow-hidden bg-white border transition-all ${
       isEditing
-        ? "border-[#F4A261]/40 shadow-lg shadow-[#F4A261]/10 col-span-full"
+        ? "border-[#F4A261]/40 shadow-lg shadow-[#F4A261]/10"
         : "border-[#C8956C]/10 shadow-sm shadow-[#C8956C]/5 hover:shadow-md hover:-translate-y-0.5"
     }`}>
       {/* Image */}
-      <div className={`relative overflow-hidden bg-[#FFF8F0] ${isEditing ? "hidden md:block md:h-48" : "aspect-[4/3]"}`}>
+      <div className={`relative overflow-hidden bg-[#FFF8F0] ${isEditing ? "hidden" : "aspect-[4/3]"}`}>
         {imgPreview ? (
           <Image
             src={imgPreview}
