@@ -18,9 +18,10 @@ export function StaffHeader({ employeeName }: { employeeName: string }) {
           <button
             onClick={async () => {
               await logoutStaff()
+              router.push("/staff/admin")
               router.refresh()
             }}
-            className="text-xs text-white/60 hover:text-white"
+            className="text-sm text-white/60 hover:text-white font-bold"
           >
             Salir
           </button>
