@@ -8,7 +8,7 @@ export function SendNotificationForm({ subscriberCount }: { subscriberCount: num
   const [title, setTitle] = useState("")
   const [body, setBody] = useState("")
   const [sending, setSending] = useState(false)
-  const [result, setResult] = useState<{ sent: number; failed: number } | null>(null)
+  const [result, setResult] = useState<{ sent: number; failed: number; error?: string } | null>(null)
   const router = useRouter()
 
   async function handleSend() {
@@ -16,15 +16,19 @@ export function SendNotificationForm({ subscriberCount }: { subscriberCount: num
     setSending(true)
     setResult(null)
 
-    const res = await sendPushNotification(title.trim(), body.trim())
+    try {
+      const res = await sendPushNotification(title.trim(), body.trim())
 
-    if (res.success) {
-      setResult({ sent: res.sent, failed: res.failed })
-      setTitle("")
-      setBody("")
-      router.refresh()
-    } else {
-      setResult({ sent: 0, failed: 0 })
+      if (res.success) {
+        setResult({ sent: res.sent, failed: res.failed })
+        setTitle("")
+        setBody("")
+        router.refresh()
+      } else {
+        setResult({ sent: 0, failed: 0, error: res.error || "Error desconocido" })
+      }
+    } catch (e) {
+      setResult({ sent: 0, failed: 0, error: `Error: ${e instanceof Error ? e.message : e}` })
     }
 
     setSending(false)
@@ -75,12 +79,12 @@ export function SendNotificationForm({ subscriberCount }: { subscriberCount: num
       </button>
 
       {result && (
-        <div className={`text-center text-sm font-bold rounded-xl py-2 ${
+        <div className={`text-center text-sm font-bold rounded-xl py-2 px-3 ${
           result.sent > 0 ? "bg-green-50 text-green-600" : "bg-red-50 text-red-400"
         }`}>
           {result.sent > 0
-            ? `✓ Enviado a ${result.sent} persona${result.sent !== 1 ? "s" : ""}`
-            : "No se pudo enviar"}
+            ? `Enviado a ${result.sent} persona${result.sent !== 1 ? "s" : ""}`
+            : result.error || "No se pudo enviar"}
           {result.failed > 0 && ` (${result.failed} fallido${result.failed !== 1 ? "s" : ""})`}
         </div>
       )}

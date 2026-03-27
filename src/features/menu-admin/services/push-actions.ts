@@ -24,8 +24,18 @@ export async function sendPushNotification(
   body: string,
   url?: string
 ): Promise<{ success: boolean; sent: number; failed: number; error?: string }> {
-  const session = await requireStaff()
-  initWebPush()
+  let session
+  try {
+    session = await requireStaff()
+  } catch {
+    return { success: false, sent: 0, failed: 0, error: "No autorizado. Cierra sesión y vuelve a entrar." }
+  }
+
+  try {
+    initWebPush()
+  } catch (e) {
+    return { success: false, sent: 0, failed: 0, error: `Error VAPID: ${e}` }
+  }
 
   const supabase = createAdminClient()
 
