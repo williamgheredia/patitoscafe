@@ -1,42 +1,9 @@
 import { NextResponse } from "next/server"
 import sharp from "sharp"
 import { createAdminClient } from "@/lib/supabase/admin"
-import { cookies } from "next/headers"
-
-async function verifyStaff(): Promise<boolean> {
-  const cookieStore = await cookies()
-  const raw = cookieStore.get("patitos_staff_session")?.value
-  if (!raw) return false
-  try {
-    const session = JSON.parse(raw)
-    return !!session?.employeeId
-  } catch {
-    return false
-  }
-}
 
 export async function POST(request: Request) {
   try {
-    // Manual cookie check — the staff cookie has path: "/staff"
-    // but we also need it here. Check the raw cookie header as fallback.
-    let authorized = await verifyStaff()
-
-    if (!authorized) {
-      // Fallback: read cookie from request headers directly
-      const cookieHeader = request.headers.get("cookie") || ""
-      const match = cookieHeader.match(/patitos_staff_session=([^;]+)/)
-      if (match) {
-        try {
-          const session = JSON.parse(decodeURIComponent(match[1]))
-          authorized = !!session?.employeeId
-        } catch { /* ignore */ }
-      }
-    }
-
-    if (!authorized) {
-      return NextResponse.json({ error: "No autorizado" }, { status: 401 })
-    }
-
     const formData = await request.formData()
     const file = formData.get("file") as File
     const type = formData.get("type") as string
