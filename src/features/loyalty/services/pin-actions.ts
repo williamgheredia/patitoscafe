@@ -52,5 +52,9 @@ export async function getStaffSession(): Promise<StaffSession | null> {
 
 export async function logoutStaff(): Promise<void> {
   const cookieStore = await cookies()
-  cookieStore.delete(COOKIE_NAME)
+  cookieStore.set(COOKIE_NAME, "", {
+    httpOnly: true,
+    path: "/staff",
+    maxAge: 0,
+  })
 }
