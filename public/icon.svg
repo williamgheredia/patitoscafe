@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="108" fill="#FFF8F0"/>
+  <circle cx="256" cy="240" r="140" fill="#FFD93D"/>
+  <circle cx="256" cy="300" r="120" fill="#FFD93D"/>
+  <ellipse cx="256" cy="370" rx="100" ry="60" fill="#FFD93D"/>
+  <!-- head -->
+  <circle cx="256" cy="190" r="90" fill="#FFD93D"/>
+  <!-- eye -->
+  <circle cx="230" cy="175" r="12" fill="#3D2B1F"/>
+  <circle cx="226" cy="171" r="4" fill="white"/>
+  <!-- blush -->
+  <circle cx="200" cy="200" r="15" fill="#FFB7C5" opacity="0.5"/>
+  <!-- beak -->
+  <ellipse cx="280" cy="195" rx="30" ry="15" fill="#F4A261"/>
+  <!-- text -->
+  <text x="256" y="450" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="52" fill="#3D2B1F">PATITOS</text>
+</svg>

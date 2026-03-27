@@ -1,12 +1,83 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import type { Product, Category } from "@/features/menu-public/types/menu"
 import { ProductForm } from "./product-form"
+import { AdminSettings } from "./admin-settings"
 import { deleteProduct, createCategory, toggleProductAvailability } from "../services/menu-actions"
 import { generateProductImage, generateCategoryImage } from "../services/image-generation"
+
+// --- Confirm Modal ---
+
+function ConfirmModal({
+  title,
+  message,
+  confirmLabel,
+  onConfirm,
+  onCancel,
+}: {
+  title: string
+  message: string
+  confirmLabel: string
+  onConfirm: () => void
+  onCancel: () => void
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onCancel}>
+      <div className="absolute inset-0 bg-[#3D2B1F]/40 backdrop-blur-sm" />
+      <div
+        className="relative bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl animate-scale-in"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h3 className="font-extrabold text-[#3D2B1F] text-base mb-2">{title}</h3>
+        <p className="text-sm text-[#3D2B1F]/60 mb-5">{message}</p>
+        <div className="flex gap-2">
+          <button
+            onClick={onConfirm}
+            className="flex-1 py-3 rounded-xl bg-red-500 text-white font-extrabold text-sm hover:bg-red-600 active:scale-[0.98] transition-all"
+          >
+            {confirmLabel}
+          </button>
+          <button
+            onClick={onCancel}
+            className="flex-1 py-3 rounded-xl bg-[#3D2B1F]/5 text-[#3D2B1F]/60 font-bold text-sm hover:bg-[#3D2B1F]/10 transition-colors"
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function useConfirm() {
+  const [state, setState] = useState<{
+    title: string
+    message: string
+    confirmLabel: string
+    resolve: (v: boolean) => void
+  } | null>(null)
+
+  const confirm = useCallback((title: string, message: string, confirmLabel = "Eliminar") => {
+    return new Promise<boolean>((resolve) => {
+      setState({ title, message, confirmLabel, resolve })
+    })
+  }, [])
+
+  const modal = state ? (
+    <ConfirmModal
+      title={state.title}
+      message={state.message}
+      confirmLabel={state.confirmLabel}
+      onConfirm={() => { state.resolve(true); setState(null) }}
+      onCancel={() => { state.resolve(false); setState(null) }}
+    />
+  ) : null
+
+  return { confirm, modal }
+}
 
 // --- Product Card ---
 
@@ -26,6 +97,7 @@ function ProductCard({
   const [genImg, setGenImg] = useState(false)
   const [imgPreview, setImgPreview] = useState(product.image_url)
   const [available, setAvailable] = useState(product.is_available)
+  const { confirm, modal } = useConfirm()
   const router = useRouter()
 
   const price = product.precio_unico
@@ -54,12 +126,18 @@ function ProductCard({
   }
 
   async function handleDelete() {
-    if (!confirm(`¿Eliminar "${product.name}"?`)) return
+    const ok = await confirm(
+      "Eliminar producto",
+      `¿Estás seguro de eliminar "${product.name}"? Esta acción no se puede deshacer.`
+    )
+    if (!ok) return
     await deleteProduct(product.id)
     router.refresh()
   }
 
   return (
+    <>
+    {modal}
     <div className={`rounded-2xl overflow-hidden bg-white border transition-all ${
       isEditing
         ? "border-[#F4A261]/40 shadow-lg shadow-[#F4A261]/10"
@@ -86,7 +164,7 @@ function ProductCard({
         {/* AI generating spinner overlay */}
         {genImg && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-10 h-10 rounded-full border-3 border-white/30 border-t-white animate-spin" />
+            <div className="w-10 h-10 rounded-full border-[3px] border-white/30 border-t-white animate-spin" />
           </div>
         )}
 
@@ -128,36 +206,38 @@ function ProductCard({
           </button>
 
           {/* Action buttons */}
-          <div className="flex gap-1.5">
-            <button
-              onClick={onStartEdit}
-              className="flex-1 py-2 rounded-xl bg-[#F4A261]/8 hover:bg-[#F4A261]/15 text-[#F4A261] text-xs font-bold transition-colors flex items-center justify-center gap-1"
-            >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
-              </svg>
-              Editar
-            </button>
-            <button
-              onClick={handleGenImage}
-              disabled={genImg}
-              className="py-2 px-3 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-400 text-xs font-bold transition-colors disabled:opacity-40"
-              title="Generar foto con IA"
-            >
-              {genImg ? (
-                <span className="animate-spin inline-block w-3.5 h-3.5 border-2 border-purple-300 border-t-purple-600 rounded-full" />
-              ) : (
-                "📸"
-              )}
-            </button>
-            <button
-              onClick={handleDelete}
-              className="py-2 px-3 rounded-xl bg-red-50 hover:bg-red-100 text-red-400 text-xs font-bold transition-colors"
-              title="Eliminar"
-            >
-              🗑
-            </button>
-          </div>
+          {genImg ? (
+            <div className="py-3 rounded-xl bg-purple-50 text-purple-500 text-xs font-bold text-center flex items-center justify-center gap-2">
+              <span className="animate-spin inline-block w-4 h-4 border-2 border-purple-300 border-t-purple-600 rounded-full" />
+              Generando foto con IA...
+            </div>
+          ) : (
+            <div className="flex gap-1.5">
+              <button
+                onClick={onStartEdit}
+                className="flex-1 py-2.5 rounded-xl bg-[#F4A261]/8 hover:bg-[#F4A261]/15 text-[#F4A261] text-xs font-bold transition-colors flex items-center justify-center gap-1"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
+                </svg>
+                Editar
+              </button>
+              <button
+                onClick={handleGenImage}
+                className="py-2.5 px-3 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-400 text-xs font-bold transition-colors"
+                title="Generar foto con IA"
+              >
+                📸
+              </button>
+              <button
+                onClick={handleDelete}
+                className="py-2.5 px-3 rounded-xl bg-red-50 hover:bg-red-100 text-red-400 text-xs font-bold transition-colors"
+                title="Eliminar"
+              >
+                🗑
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -172,6 +252,7 @@ function ProductCard({
         </div>
       )}
     </div>
+    </>
   )
 }
 
@@ -312,13 +393,16 @@ export function AdminProductList({
   products,
   categories,
   topProducts,
+  appSettings,
 }: {
   products: Product[]
   categories: Category[]
   topProducts: TopProduct[]
+  appSettings: Record<string, string>
 }) {
   const [activeCatId, setActiveCatId] = useState<string | null>(categories[0]?.id ?? null)
   const [showStats, setShowStats] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
   const [showNewCat, setShowNewCat] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const router = useRouter()
@@ -363,7 +447,7 @@ export function AdminProductList({
           })}
 
           <button
-            onClick={() => { setShowStats(true); setShowNewCat(false); setEditingId(null) }}
+            onClick={() => { setShowStats(true); setShowSettings(false); setShowNewCat(false); setEditingId(null) }}
             className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all ${
               showStats ? "bg-[#3D2B1F] text-white" : "bg-white text-[#3D2B1F]/50 border border-[#C8956C]/15"
             }`}
@@ -372,7 +456,16 @@ export function AdminProductList({
           </button>
 
           <button
-            onClick={() => { setShowNewCat(true); setShowStats(false) }}
+            onClick={() => { setShowSettings(true); setShowStats(false); setShowNewCat(false); setEditingId(null) }}
+            className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all ${
+              showSettings ? "bg-[#3D2B1F] text-white" : "bg-white text-[#3D2B1F]/50 border border-[#C8956C]/15"
+            }`}
+          >
+            ⚙️ Config
+          </button>
+
+          <button
+            onClick={() => { setShowNewCat(true); setShowStats(false); setShowSettings(false) }}
             className="px-3.5 py-2 rounded-full text-xs font-bold text-[#F4A261] border border-dashed border-[#F4A261]/40 hover:bg-[#F4A261]/5 transition-all"
           >
             ＋
@@ -388,7 +481,9 @@ export function AdminProductList({
       )}
 
       {/* Content */}
-      {showStats ? (
+      {showSettings ? (
+        <AdminSettings settings={appSettings} />
+      ) : showStats ? (
         <StatsView products={topProducts} />
       ) : (
         <>
