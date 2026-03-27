@@ -22,7 +22,7 @@ export async function generateProductImage(
     return { success: false, error: "OPENROUTER_API_KEY no configurada" }
   }
 
-  const prompt = `A professional food photography shot of a "${productName}" drink from a cute café called Patitos. Category: ${categoryName}. The drink should look delicious, well-lit, on a warm cream/beige background. Aesthetic: cute, instagrammable, warm tones, soft natural lighting. No text or logos. Shot from a slight angle, shallow depth of field.`
+  const prompt = `Professional food photography, aesthetic Instagram style. A beautiful "${productName}" drink from Patitos Café (${categoryName}). Style: clean minimalist, soft pastel background in cream and beige tones, natural lighting from a window, shallow depth of field. The drink is centered, perfectly styled with subtle garnishes. Warm color palette, no harsh shadows. Shot on 85mm lens, slightly overhead angle. No text, no logos, no watermarks. Mood: cozy café, instagrammable, warm and inviting.`
 
   try {
     // Call OpenRouter with an image generation model
