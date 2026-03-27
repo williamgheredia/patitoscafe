@@ -8,9 +8,21 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
       <div className="max-w-lg mx-auto">
         {/* Hero */}
         <div className="text-center mb-8 animate-fade-up">
-          <div className="inline-flex items-center gap-1.5 bg-[#F4A261]/10 text-[#F4A261] text-sm font-bold px-4 py-1.5 rounded-full mb-4 uppercase tracking-wider">
+          <div className="inline-flex items-center gap-1.5 bg-[#F4A261]/10 text-[#F4A261] text-sm font-bold px-4 py-1.5 rounded-full mb-2 uppercase tracking-wider">
             <span>📍</span> Frente a Urgencias IMSS 510
           </div>
+          <a
+            href="https://share.google/lYCxpbkee1pkYN0QL"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-[#C8956C] hover:text-[#F4A261] transition-colors mb-4"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+            </svg>
+            Ver Ubicación
+          </a>
           <h2 className="font-[family-name:var(--font-display)] text-3xl font-black text-[#3D2B1F] tracking-tight italic leading-tight">
             ¿Qué se te antoja?
           </h2>
