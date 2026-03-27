@@ -89,16 +89,48 @@ export async function generateProductImage(
 ): Promise<{ success: boolean; error?: string; imageUrl?: string }> {
   await requireStaff()
 
-  const prompt = `Generate a photo: ${STARBUCKS_STYLE}
-
-You are generating a product image for a café menu. Use your knowledge of beverages to create an accurate photo.
-
-Category: "${categoryName}"
-Product name: "${productName}"
-
-CRITICAL: You must understand what "${productName}" actually IS as a real-world drink in the context of the "${categoryName}" category at a café. Show the drink in its correct form — the right glass/cup type, the right color, the right texture, the right size, the right presentation. If you don't know what it looks like, think about what a barista would serve when a customer orders exactly "${productName}" from the "${categoryName}" section. Do NOT default to a generic frappe or iced drink. Each product is different and must look like itself.`
-
   try {
+    // Step 1: Use text model to reason about what this drink looks like
+    const apiKey = process.env.OPENROUTER_API_KEY!
+    const descResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.0-flash-001",
+        messages: [
+          {
+            role: "system",
+            content: "You are a barista and food photographer. Given a drink name and category, describe EXACTLY what this drink looks like physically: the type of cup/glass, the color of the liquid, the texture (foamy, icy, clear, layered), toppings, garnishes, size, and how it's typically presented. Be very specific and visual. Answer in English. Max 3 sentences.",
+          },
+          {
+            role: "user",
+            content: `Describe the physical appearance of "${productName}" from the "${categoryName}" category at a café. What does it look like when served?`,
+          },
+        ],
+        max_tokens: 150,
+        temperature: 0.3,
+      }),
+    })
+
+    let drinkDescription = ""
+    if (descResponse.ok) {
+      const descData = await descResponse.json()
+      drinkDescription = descData.choices?.[0]?.message?.content?.trim() ?? ""
+    }
+
+    // Step 2: Generate image with the detailed description
+    const prompt = `Generate a photo: ${STARBUCKS_STYLE}
+
+Product: "${productName}" (category: ${categoryName})
+
+Detailed visual description of this specific drink:
+${drinkDescription || `A "${productName}" as served in a café.`}
+
+Generate EXACTLY this drink. Not a generic drink. This specific one.`
+
     const result = await callGeminiImage(prompt, "3:4")
     if (!result.success) return result
 
