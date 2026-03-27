@@ -89,7 +89,24 @@ export async function generateProductImage(
 ): Promise<{ success: boolean; error?: string; imageUrl?: string }> {
   await requireStaff()
 
-  const prompt = `Generate a photo: ${STARBUCKS_STYLE} The drink is a "${productName}" (category: ${categoryName}). Show the actual drink beautifully presented — if it's a frappe show the blended texture with whipped cream, if it's a hot coffee show the latte art, if it's a smoothie show the vibrant fruit colors. Make it look absolutely delicious.`
+  const prompt = `Generate a photo: ${STARBUCKS_STYLE}
+
+IMPORTANT: The drink is EXACTLY a "${productName}". This is the SPECIFIC drink you must show — not a generic café drink.
+
+Rules for "${productName}":
+- If the name contains "Espresso": show a small ceramic espresso cup with dark concentrated coffee, crema on top. NOT a frappe, NOT a large drink.
+- If the name contains "Americano": show a clear glass or ceramic mug with black coffee, slightly transparent. NOT a latte.
+- If the name contains "Capuccino" or "Latte": show a ceramic cup with steamed milk and latte art on top.
+- If the name contains "Moka": show a coffee drink with visible chocolate swirls.
+- If the name contains "Frappe": show a tall clear plastic cup with blended icy drink, whipped cream on top, straw.
+- If the name contains "Smoothie" or "Licuado": show a tall glass with vibrant blended fruit, bright colors.
+- If the name contains "Té" or "Tea" or "Chai": show a clear glass cup with tea, you can see through the liquid.
+- If the name contains "Soda": show a tall glass with sparkling colored drink, ice, bubbles visible.
+- If the name contains "Matcha": show vibrant green colored drink.
+- If the name contains "Taro": show purple/lavender colored drink.
+- Otherwise: show a beautiful "${productName}" drink in the style of category "${categoryName}".
+
+The drink must be RECOGNIZABLE as "${productName}". Do not substitute with a different drink type.`
 
   try {
     const result = await callGeminiImage(prompt, "3:4")
