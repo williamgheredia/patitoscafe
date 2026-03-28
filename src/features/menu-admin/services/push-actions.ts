@@ -114,3 +114,43 @@ export async function getNotificationLog(): Promise<
     .limit(20)
   return data ?? []
 }
+
+export async function deleteNotification(id: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    await requireStaff()
+  } catch {
+    return { success: false, error: "No autorizado" }
+  }
+
+  const supabase = createAdminClient()
+  const { error } = await supabase
+    .from("push_notifications_log")
+    .delete()
+    .eq("id", id)
+
+  if (error) return { success: false, error: error.message }
+
+  revalidatePath("/staff/notificaciones")
+  revalidatePath("/notificaciones")
+  return { success: true }
+}
+
+export async function clearAllNotifications(): Promise<{ success: boolean; error?: string }> {
+  try {
+    await requireStaff()
+  } catch {
+    return { success: false, error: "No autorizado" }
+  }
+
+  const supabase = createAdminClient()
+  const { error } = await supabase
+    .from("push_notifications_log")
+    .delete()
+    .neq("id", "00000000-0000-0000-0000-000000000000") // delete all rows
+
+  if (error) return { success: false, error: error.message }
+
+  revalidatePath("/staff/notificaciones")
+  revalidatePath("/notificaciones")
+  return { success: true }
+}
