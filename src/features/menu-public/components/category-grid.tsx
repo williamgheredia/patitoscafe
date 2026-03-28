@@ -25,8 +25,10 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
             </svg>
             Ver Ubicación
           </a>
-          <span className="mx-2 text-[#C8956C]/30">·</span>
-          <SubscribeButton />
+          <br />
+          <div className="mt-2 mb-3">
+            <SubscribeButton />
+          </div>
           <h2 className="font-[family-name:var(--font-display)] text-3xl font-black text-[#3D2B1F] tracking-tight italic leading-tight">
             ¿Qué se te antoja?
           </h2>

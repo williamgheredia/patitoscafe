@@ -1,0 +1,4 @@
+[    4242ms] [WARNING] Image with src "https://soqkmjdtpzrmenksmwmk.supabase.co/storage/v1/object/public/product-images/cat-7e608885-21b5-4fd2-b9fb-628adc744c30-1774634713319.webp" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[    4259ms] [WARNING] Image with src "https://soqkmjdtpzrmenksmwmk.supabase.co/storage/v1/object/public/product-images/cat-94e8fd99-6ada-446a-8031-bfac316d4efd-1774634719169.webp" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431

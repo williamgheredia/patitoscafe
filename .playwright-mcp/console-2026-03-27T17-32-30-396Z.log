@@ -1,0 +1,48 @@
+[   23150ms] [ERROR] ./src/features/menu-public/components/category-grid.tsx:64:12
+Expected '</', got ')'
+  62 |               )}
+  63 |             </Link>
+> 64 |           ))}
+     |            ^
+  65 |         </div>
+  66 |
+  67 |         {/* Decorative wave */}
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./src/features/menu-public/components/category-grid.tsx
+    ./src/app/page.tsx @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[   23496ms] [ERROR] ./src/features/menu-public/components/category-grid.tsx:64:12
+Expected '</', got ')'
+  62 |               )}
+  63 |             </Link>
+> 64 |           ))}
+     |            ^
+  65 |         </div>
+  66 |
+  67 |         {/* Decorative wave */}
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./src/features/menu-public/components/category-grid.tsx
+    ./src/app/page.tsx @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[   23575ms] [ERROR] ./src/features/menu-public/components/category-grid.tsx:64:12
+Expected '</', got ')'
+  62 |               )}
+  63 |             </Link>
+> 64 |           ))}
+     |            ^
+  65 |         </div>
+  66 |
+  67 |         {/* Decorative wave */}
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./src/features/menu-public/components/category-grid.tsx
+    ./src/app/page.tsx @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
